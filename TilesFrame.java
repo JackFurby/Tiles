@@ -92,26 +92,4 @@ public class TilesFrame extends JFrame implements ActionListener{
         add( mainPanel );
         pack();
     }
-    
-    //
-    //events for the window
-    public void actionPerformed(ActionEvent e) {
-        //add events here
-    }
-
-    //gets selected string in input area
-    public static String getSelectedText() {
-        return (inputArea.getSelectedText() + outputArea.getSelectedText());
-    }
-
-    //adds in text where the curser is for inputArea
-    public static void insertText(String textIn) {
-        JPanel warningPanel = new JPanel();
-
-        try {
-            inputArea.insert(textIn, inputArea.getCaretPosition()); //if pasteObj can be converted to text it is added to inputArea
-        } catch (Exception expt){
-            JOptionPane.showMessageDialog(warningPanel,expt,"Paste error",JOptionPane.ERROR_MESSAGE); // else error is displayed
-        }
-    }
 }
