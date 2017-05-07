@@ -5,7 +5,7 @@ import java.util.*;
 import java.awt.datatransfer.*;
 import javax.swing.event.*;
 
-public class TilesFrame extends JFrame implements ActionListener{
+public class TilesFrame extends JFrame {
 
     // Instance variables -- GUI components
     private JPanel editViewPanel, mainPanel;
