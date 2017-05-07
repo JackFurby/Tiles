@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.datatransfer.*;
 import javax.swing.text.DefaultEditorKit;
 
 public class Menu extends JFrame {
@@ -9,8 +8,6 @@ public class Menu extends JFrame {
     private static JMenuBar menuBar;
     private static JMenuItem newItm, openItm, openRecentItm, exitItm, cutItm, copyItm, pasteItm, exportItm, saveItm, saveAsItm;
     private static JMenu editMenu, fileMenu, viewMenu, helpMenu;
-
-    private Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
 
     public JMenuBar Menu() {
@@ -48,12 +45,12 @@ public class Menu extends JFrame {
         exportItm = new JMenuItem( "Export" );
 
         //set properties for elements
-        copyItm.setText("Copy");
-        copyItm.setMnemonic(KeyEvent.VK_C);
-        pasteItm.setText("Paste");
-        pasteItm.setMnemonic(KeyEvent.VK_P);
-        cutItm.setText("Cut");
-        cutItm.setMnemonic(KeyEvent.VK_UP);
+        copyItm.setText( "Copy" );
+        copyItm.setMnemonic( KeyEvent.VK_C );
+        pasteItm.setText( "Paste" );
+        pasteItm.setMnemonic( KeyEvent.VK_P );
+        cutItm.setText( "Cut" );
+        cutItm.setMnemonic( KeyEvent.VK_UP );
 
         //adding items to fileMenu
         fileMenu.add( newItm );
@@ -70,39 +67,39 @@ public class Menu extends JFrame {
         editMenu.add( pasteItm );
 
         //ActionListener for menu items
-        newItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        newItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
                 System.out.println( "newItm" );
             }
         });
-        openItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        openItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
                 System.out.println( "openItm" );
             }
         });
-        openRecentItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        openRecentItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
                 System.out.println( "openRecentItm" );
             }
         });
-        saveItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        saveItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
                 System.out.println( "saveItm" );
             }
         });
-        saveAsItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        saveAsItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
                 System.out.println( "saveAsItm" );
             }
         });
-        exportItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        exportItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
                 System.out.println( "exportItm" );
             }
         });
-        exitItm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println( "exitItm" );
+        exitItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+                System.exit( 0 );
             }
         });
 
