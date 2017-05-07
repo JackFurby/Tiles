@@ -33,24 +33,44 @@ public class Menu extends JFrame {
         menuBar.add( helpMenu );
 
         //items for elements
-        newItm = new JMenuItem( "New" );
-        openItm = new JMenuItem( "Open..." );
-        openRecentItm = new JMenuItem( "Open Recent" );
-        saveItm = new JMenuItem( "Save" );
-        saveAsItm = new JMenuItem( "Save as" );
-        exitItm = new JMenuItem( "Exit" );
+        newItm = new JMenuItem();
+        openItm = new JMenuItem();
+        openRecentItm = new JMenuItem();
+        saveItm = new JMenuItem();
+        saveAsItm = new JMenuItem();
+        exitItm = new JMenuItem();
         cutItm = new JMenuItem( new DefaultEditorKit.CutAction() );
         copyItm = new JMenuItem( new DefaultEditorKit.CopyAction() );
         pasteItm = new JMenuItem( new DefaultEditorKit.PasteAction() );
-        exportItm = new JMenuItem( "Export" );
+        exportItm = new JMenuItem();
 
         //set properties for elements
         copyItm.setText( "Copy" );
         copyItm.setMnemonic( KeyEvent.VK_C );
+        copyItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_C, ActionEvent.META_MASK ) );
         pasteItm.setText( "Paste" );
-        pasteItm.setMnemonic( KeyEvent.VK_P );
+        pasteItm.setMnemonic( KeyEvent.VK_V );
+        pasteItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_V, ActionEvent.META_MASK ) );
         cutItm.setText( "Cut" );
-        cutItm.setMnemonic( KeyEvent.VK_UP );
+        cutItm.setMnemonic( KeyEvent.VK_X );
+        cutItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_X, ActionEvent.META_MASK ) );
+        newItm.setText( "New" );
+        newItm.setMnemonic( KeyEvent.VK_N );
+        newItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_N, ActionEvent.META_MASK ) );
+        openItm.setText( "Open..." );
+        openItm.setMnemonic( KeyEvent.VK_O );
+        openItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_O, ActionEvent.META_MASK ) );
+        exitItm.setText( "Close Window" );
+        exitItm.setMnemonic( KeyEvent.VK_W );
+        exitItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_W, ActionEvent.META_MASK ) );
+        saveItm.setText( "Save" );
+        saveItm.setMnemonic( KeyEvent.VK_S );
+        saveItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_S, ActionEvent.META_MASK ) );
+        saveAsItm.setText( "Save as" );
+        saveAsItm.setMnemonic( KeyEvent.VK_S );
+        saveAsItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_S, ActionEvent.SHIFT_MASK + ActionEvent.META_MASK ) );
+        openRecentItm.setText( "Open Recent" );
+        exportItm.setText( "Export" );
 
         //adding items to fileMenu
         fileMenu.add( newItm );
