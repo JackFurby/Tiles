@@ -40,12 +40,29 @@ public class Config {
     public void saveConfig() {
         //saving config file
         try {
-
-            PrintWriter output = new PrintWriter( "config.txt" );                                  //<--add items to go in config file
+            PrintWriter output = new PrintWriter( "config.txt" );
+            output.println( "width:640" );
+            output.println( "height:480" );
+            Point p = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+            output.println( "x:" + p.x );
+            output.println( "y:" + p.y );                              //<--add items to go in config file
             output.close();
         } catch ( Exception outError ) {
             JPanel warningPanel = new JPanel();
             JOptionPane.showMessageDialog( warningPanel,outError,"Error saving config file",JOptionPane.ERROR_MESSAGE );
         }
     }
+    public static int getWidth() {
+        return Integer.parseInt( configItems.get( "width" ) );
+    }
+    public static int getHeight() {
+        return Integer.parseInt( configItems.get( "height" ) );
+    }
+    public static int getX() {
+        return Integer.parseInt( configItems.get( "x" ) );
+    }
+    public static int getY() {
+        return Integer.parseInt( configItems.get( "y" ) );
+    }
+
 }

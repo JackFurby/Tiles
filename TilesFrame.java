@@ -61,10 +61,6 @@ public class TilesFrame extends JFrame {
         BorderLayout mainLayout = new BorderLayout();
         mainPanel.setLayout( mainLayout );
 
-        //set proberties for mainPanel                               //<--load config class / file here
-        Config config = new Config();
-        mainPanel.setPreferredSize( new Dimension( 1280, 720 ) );
-
         //add components to panel
         mainPanel.add( editViewPanel,BorderLayout.CENTER );
 
