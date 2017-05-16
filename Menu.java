@@ -6,8 +6,8 @@ import javax.swing.text.DefaultEditorKit;
 public class Menu extends JFrame {
 
     private static JMenuBar menuBar;
-    private static JMenuItem newItm, openItm, openRecentItm, exitItm, cutItm, copyItm, pasteItm, exportItm, saveItm, saveAsItm;
-    private static JMenu editMenu, fileMenu, viewMenu, helpMenu;
+    private static JMenuItem newItm, openItm, openRecentItm, exitItm, cutItm, copyItm, pasteItm, saveItm, saveAsItm, enterFullScreenItm, pdfExpItm, htmlExpItm;
+    private static JMenu editMenu, fileMenu, viewMenu, helpMenu, exportMenu;
 
 
     public JMenuBar Menu() {
@@ -25,6 +25,7 @@ public class Menu extends JFrame {
         editMenu = new JMenu( "Edit" );
         viewMenu = new JMenu( "View" );
         helpMenu = new JMenu( "Help" );
+        exportMenu = new JMenu( "Export" );
 
         //adding elements to menu
         menuBar.add( fileMenu );
@@ -42,7 +43,9 @@ public class Menu extends JFrame {
         cutItm = new JMenuItem( new DefaultEditorKit.CutAction() );
         copyItm = new JMenuItem( new DefaultEditorKit.CopyAction() );
         pasteItm = new JMenuItem( new DefaultEditorKit.PasteAction() );
-        exportItm = new JMenuItem();
+        enterFullScreenItm = new JMenuItem();
+        pdfExpItm = new JMenuItem();
+        htmlExpItm = new JMenuItem();
 
         //set properties for elements
         copyItm.setText( "Copy" );
@@ -70,7 +73,15 @@ public class Menu extends JFrame {
         saveAsItm.setMnemonic( KeyEvent.VK_S );
         saveAsItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_S, ActionEvent.SHIFT_MASK + ActionEvent.META_MASK ) );
         openRecentItm.setText( "Open Recent" );
-        exportItm.setText( "Export" );
+        enterFullScreenItm.setText( "Toggle Full Screen" );
+        enterFullScreenItm.setMnemonic( KeyEvent.VK_F );
+        enterFullScreenItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_F, ActionEvent.CTRL_MASK + ActionEvent.META_MASK ) );
+        pdfExpItm.setText( "PDF" );
+        pdfExpItm.setMnemonic( KeyEvent.VK_P );
+        pdfExpItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_P, ActionEvent.ALT_MASK + ActionEvent.META_MASK ) );
+        htmlExpItm.setText( "HTML" );
+        htmlExpItm.setMnemonic( KeyEvent.VK_E );
+        htmlExpItm.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_E, ActionEvent.ALT_MASK + ActionEvent.META_MASK ) );
 
         //adding items to fileMenu
         fileMenu.add( newItm );
@@ -78,13 +89,20 @@ public class Menu extends JFrame {
         fileMenu.add( openRecentItm );
         fileMenu.add( saveItm );
         fileMenu.add( saveAsItm );
-        fileMenu.add( exportItm );
+        fileMenu.add( exportMenu );
         fileMenu.add( exitItm );
 
         //adding items to editMenu
         editMenu.add( cutItm );
         editMenu.add( copyItm );
         editMenu.add( pasteItm );
+
+        //adding items to viewMenu
+        viewMenu.add( enterFullScreenItm );
+
+        //adding items to exportMenu
+        exportMenu.add( pdfExpItm );
+        exportMenu.add( htmlExpItm );
 
         //ActionListener for menu items
         newItm.addActionListener( new ActionListener() {
@@ -112,14 +130,24 @@ public class Menu extends JFrame {
                 System.out.println( "saveAsItm" );
             }
         });
-        exportItm.addActionListener( new ActionListener() {
-            public void actionPerformed( ActionEvent e ) {
-                System.out.println( "exportItm" );
-            }
-        });
         exitItm.addActionListener( new ActionListener() {
             public void actionPerformed( ActionEvent e ) {
                 System.exit( 0 );
+            }
+        });
+        enterFullScreenItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+                System.out.println( "FullScreenItm" );
+            }
+        });
+        pdfExpItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+                System.out.println( "PDF output" );
+            }
+        });
+        htmlExpItm.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+                System.out.println( "HTML output" );
             }
         });
 
