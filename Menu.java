@@ -5,6 +5,8 @@ import javax.swing.text.DefaultEditorKit;
 
 public class Menu extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private static JMenuBar menuBar;
     private static JMenuItem newItm, openItm, openRecentItm, exitItm, cutItm, copyItm, pasteItm, saveItm, saveAsItm, enterFullScreenItm, pdfExpItm, htmlExpItm;
     private static JMenu editMenu, fileMenu, viewMenu, helpMenu, exportMenu;

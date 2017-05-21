@@ -6,11 +6,14 @@ import javax.swing.event.*;
 
 public class TilesFrame extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     // Instance variables -- GUI components
     private JPanel editViewPanel, mainPanel;
     private JLabel instructionLabel;
     private static JTextArea inputArea, outputArea;
     private JScrollPane inputScroll, outputScroll;
+    private JSplitPane combinedArea;
 
 
     // Constructor
@@ -27,7 +30,7 @@ public class TilesFrame extends JFrame {
 
         // Set up the editViewPanel and layout manager
         editViewPanel = new JPanel();
-        GridLayout editViewgrid = new GridLayout( 0, 2 );
+        GridLayout editViewgrid = new GridLayout( 0, 1 );
         editViewPanel.setLayout( editViewgrid );
 
         //set up components
@@ -35,6 +38,7 @@ public class TilesFrame extends JFrame {
         outputArea = new JTextArea();
         inputScroll = new JScrollPane( inputArea );
         outputScroll = new JScrollPane( outputArea );
+        combinedArea = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT,inputArea, outputArea );
 
         //set properties for components
         inputArea.setBackground( Color.black );
@@ -44,17 +48,20 @@ public class TilesFrame extends JFrame {
         inputArea.setWrapStyleWord( true );
         inputArea.setLineWrap( true );
         inputArea.setFont( new Font( "", Font.PLAIN, 16) );
+        inputArea.setMinimumSize(new Dimension(0,0)); //allows JSplitPane resize with mouse
         outputArea.setEditable( false );
         outputArea.setMargin( new Insets( 15,15,15,15 ) );
         outputArea.setWrapStyleWord( true );
         outputArea.setLineWrap( true );
         outputArea.setFont( new Font( "", Font.PLAIN, 16 ) );
+        outputArea.setMinimumSize(new Dimension(0,0)); //allows JSplitPane resize with mouse
         inputScroll.setBorder( BorderFactory.createEmptyBorder() );
         outputScroll.setBorder( BorderFactory.createEmptyBorder() );
+        combinedArea.setOneTouchExpandable(true);
+        combinedArea.setResizeWeight(0.5); //JSplitPane bar in center of window
 
         //add components to editViewPanel
-        editViewPanel.add( inputScroll );
-        editViewPanel.add( outputScroll );
+        editViewPanel.add( combinedArea );
 
         // Set up the mainPanel and layout manager
         mainPanel = new JPanel();
