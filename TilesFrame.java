@@ -8,18 +8,18 @@ public class TilesFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
+    Md2html convert2html = new Md2html(); //make conversion form MD to HTML available
+
     // Instance variables -- GUI components
     private JPanel editViewPanel, mainPanel;
     private JLabel instructionLabel;
     private static JTextArea inputArea, outputArea;
     private JScrollPane inputScroll, outputScroll;
-    private JSplitPane combinedArea;
-
+    private static JSplitPane combinedArea;
 
     // Constructor
     public TilesFrame() {
         super();
-
 
         // Set up the frame
         setTitle( "Tiles (Markdown)" );
@@ -47,8 +47,8 @@ public class TilesFrame extends JFrame {
         inputArea.setMargin( new Insets( 15,15,15,15 ) );
         inputArea.setWrapStyleWord( true );
         inputArea.setLineWrap( true );
-        inputArea.setFont( new Font( "", Font.PLAIN, 16) );
-        inputArea.setMinimumSize(new Dimension(0,0)); //allows JSplitPane resize with mouse
+        inputArea.setFont( new Font( "", Font.PLAIN, 16 ) );
+        inputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
         outputArea.setEditable( false );
         outputArea.setMargin( new Insets( 15,15,15,15 ) );
         outputArea.setWrapStyleWord( true );
@@ -74,7 +74,7 @@ public class TilesFrame extends JFrame {
         //add document listener to inputArea. This will update outputArea with inputArea text converted to plain text from md
         inputArea.getDocument().addDocumentListener( new DocumentListener() {
             public void removeUpdate( DocumentEvent e ) {
-                outputArea.setText( inputArea.getText() );
+                outputArea.setText( convert2html.convert( inputArea.getText() ) );
             }
 
             public void insertUpdate( DocumentEvent e ) {
@@ -89,5 +89,10 @@ public class TilesFrame extends JFrame {
         //add and pack mainPanel
         add( mainPanel );
         pack();
+    }
+
+    //changes the postion of DividerLocation with the SplitPane combinedArea
+    public static void setSplitPaneRatio( double ratio ) {
+        combinedArea.setDividerLocation( ratio );
     }
 }
