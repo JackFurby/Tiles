@@ -59,6 +59,7 @@ public class TilesFrame extends JFrame {
         outputScroll.setBorder( BorderFactory.createEmptyBorder() );
         combinedArea.setOneTouchExpandable(true);
         combinedArea.setResizeWeight(0.5); //JSplitPane bar in center of window
+        combinedArea.setBorder( BorderFactory.createEmptyBorder() );
 
         //add components to editViewPanel
         editViewPanel.add( combinedArea );
@@ -78,11 +79,11 @@ public class TilesFrame extends JFrame {
             }
 
             public void insertUpdate( DocumentEvent e ) {
-                outputArea.setText( inputArea.getText() );
+                outputArea.setText( convert2html.convert( inputArea.getText() ) );
             }
 
             public void changedUpdate( DocumentEvent e ) {
-                outputArea.setText( inputArea.getText() );
+                outputArea.setText( convert2html.convert( inputArea.getText() ) );
             }
         });
 

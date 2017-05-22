@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Md2html {
 
@@ -27,10 +29,25 @@ public class Md2html {
         String[] lines = text.split("\\r?\\n");
         List<String> convertedText = new ArrayList<String>();
         for ( int lineNum = 0; lineNum < lines.length; lineNum++ ) {
-            //if ( text.nextLine().containsKey( splitMessage[i].replaceAll( "[,;?.!]{1}$", "" ) ) {
-                //if ( abbrev.containsKey( splitMessage[i].replaceAll( "[,;?.!]{1}$", "" ) ) ) {
             convertedText.add(lines[lineNum]);
         }
         return String.join( "\n", convertedText );
     }
 }
+
+
+//does not work
+/*
+for (String key : md2htmlDict.keySet()) {
+    if ( lines[lineNum].matches( key ) ) {
+        Pattern pattern = Pattern.compile(key);
+        Matcher matcher = pattern.matcher(lines[lineNum]);
+        String start = matcher.group(1);
+        String textObject = matcher.group(2);
+        String end = matcher.group(3);
+        System.out.println(start);
+        System.out.println(textObject);
+        System.out.println(end);
+    }
+}
+*/
