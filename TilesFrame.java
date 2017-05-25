@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
+import static javax.swing.ScrollPaneConstants.*;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
@@ -41,7 +44,7 @@ public class TilesFrame extends JFrame {
         outputArea = new JEditorPane();
         inputScroll = new JScrollPane( inputArea );
         outputScroll = new JScrollPane( outputArea );
-        combinedArea = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, inputArea, outputArea );
+        combinedArea = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, inputScroll, outputScroll );
 
         //set properties for components
         inputArea.setBackground( Color.black );
@@ -54,14 +57,30 @@ public class TilesFrame extends JFrame {
         inputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
         outputArea.setEditable( false );
         outputArea.setMargin( new Insets( 15,15,15,15 ) );
-        outputArea.setFont( new Font( "", Font.PLAIN, 16 ) );
         outputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
         outputArea.setContentType( "text/html" );
+        HTMLEditorKit kit = new HTMLEditorKit();
+        outputArea.setEditorKit(kit);
         inputScroll.setBorder( BorderFactory.createEmptyBorder() );
+        inputScroll.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         outputScroll.setBorder( BorderFactory.createEmptyBorder() );
+        //outputScroll.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         combinedArea.setOneTouchExpandable( true );
         combinedArea.setBorder( BorderFactory.createEmptyBorder() );
         combinedArea.setResizeWeight( 0.4 ); //JSplitPane bar in center of window
+
+        //css styling for outputArea
+        StyleSheet styleSheet = kit.getStyleSheet();
+        styleSheet.addRule( "body {font-family: Helvetica, Arial, Sans-Serif;font-size: 14px;line-height: 1.6;padding: 10px;color: #000000;min-width: 0;overflow-wrap: break-word;word-wrap: break-word;}" );
+        //styleSheet.addRule( "p {-webkit-flex-wrap: wrap;}" );
+        styleSheet.addRule( "a {color: #393939;text-decoration: none;}" );
+        styleSheet.addRule( "h1, h2, h3, h4, h5, h6 {font-weight: bold;margin: 20px 0 10px;}" );
+        styleSheet.addRule( "h1 {font-size: 28px;text-decoration: underline;}" );
+        styleSheet.addRule( "h2 {font-size: 24px;}" );
+        styleSheet.addRule( "h3 {font-size: 18px;}" );
+        styleSheet.addRule( "h4 {font-size: 16px;}" );
+        styleSheet.addRule( "h5 {font-size: 14px;}" );
+        styleSheet.addRule( "h6 {font-size: 12px;}" );
 
         //add components to editViewPanel
         editViewPanel.add( combinedArea );
