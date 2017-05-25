@@ -4,7 +4,9 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 
-import org.markdown4j.Markdown4jProcessor;
+import org.commonmark.node.*;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 public class TilesFrame extends JFrame {
 
@@ -13,7 +15,8 @@ public class TilesFrame extends JFrame {
     // Instance variables -- GUI components
     private JPanel editViewPanel, mainPanel;
     private JLabel instructionLabel;
-    private static JTextArea inputArea, outputArea;
+    private static JTextArea inputArea;
+    private static JEditorPane outputArea;
     private JScrollPane inputScroll, outputScroll;
     private static JSplitPane combinedArea;
 
@@ -35,10 +38,10 @@ public class TilesFrame extends JFrame {
 
         //set up components
         inputArea = new JTextArea();
-        outputArea = new JTextArea();
+        outputArea = new JEditorPane();
         inputScroll = new JScrollPane( inputArea );
         outputScroll = new JScrollPane( outputArea );
-        combinedArea = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT,inputArea, outputArea );
+        combinedArea = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, inputArea, outputArea );
 
         //set properties for components
         inputArea.setBackground( Color.black );
@@ -51,15 +54,14 @@ public class TilesFrame extends JFrame {
         inputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
         outputArea.setEditable( false );
         outputArea.setMargin( new Insets( 15,15,15,15 ) );
-        outputArea.setWrapStyleWord( true );
-        outputArea.setLineWrap( true );
         outputArea.setFont( new Font( "", Font.PLAIN, 16 ) );
-        outputArea.setMinimumSize(new Dimension(0,0)); //allows JSplitPane resize with mouse
+        outputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
+        outputArea.setContentType( "text/html" );
         inputScroll.setBorder( BorderFactory.createEmptyBorder() );
         outputScroll.setBorder( BorderFactory.createEmptyBorder() );
-        combinedArea.setOneTouchExpandable(true);
-        combinedArea.setResizeWeight(0.5); //JSplitPane bar in center of window
+        combinedArea.setOneTouchExpandable( true );
         combinedArea.setBorder( BorderFactory.createEmptyBorder() );
+        combinedArea.setResizeWeight( 0.4 ); //JSplitPane bar in center of window
 
         //add components to editViewPanel
         editViewPanel.add( combinedArea );
@@ -74,28 +76,21 @@ public class TilesFrame extends JFrame {
 
         //add document listener to inputArea. This will update outputArea with inputArea text converted to plain text from md
         inputArea.getDocument().addDocumentListener( new DocumentListener() {
+            Parser parser = Parser.builder().build(); //parser for converting md to html
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
             public void removeUpdate( DocumentEvent e ) {
-                try {
-                    outputArea.setText( new Markdown4jProcessor().process(inputArea.getText()));
-                } catch (Exception another) {
-                    outputArea.setText( "Error converting markdown to HTML" );
-                }
+                Node document = parser.parse( inputArea.getText() ); //gets text from inputArea
+                outputArea.setText( renderer.render( document ) ); //converts md to html and set text in outputArea to converted text
             }
 
             public void insertUpdate( DocumentEvent e ) {
-                try {
-                    outputArea.setText( new Markdown4jProcessor().process(inputArea.getText()));
-                } catch (Exception another) {
-                    outputArea.setText( "Error converting markdown to HTML" );
-                }
+                Node document = parser.parse( inputArea.getText() ); //gets text from inputArea
+                outputArea.setText( renderer.render( document ) ); //converts md to html and set text in outputArea to converted text
             }
 
             public void changedUpdate( DocumentEvent e ) {
-                try {
-                    outputArea.setText( new Markdown4jProcessor().process(inputArea.getText()));
-                } catch (Exception another) {
-                    outputArea.setText( "Error converting markdown to HTML" );
-                }
+                Node document = parser.parse( inputArea.getText() ); //gets text from inputArea
+                outputArea.setText( renderer.render( document ) ); //converts md to html and set text in outputArea to converted text
             }
         });
 
