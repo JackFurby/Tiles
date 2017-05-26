@@ -7,6 +7,11 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 import static javax.swing.ScrollPaneConstants.*;
 
+//import javafx.scene.Scene;
+//import javafx.embed.swing.JFXPanel;
+//import javafx.scene.web.WebView;
+//import javafx.application.Platform;
+
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -18,10 +23,11 @@ public class TilesFrame extends JFrame {
     // Instance variables -- GUI components
     private JPanel editViewPanel, mainPanel;
     private JLabel instructionLabel;
-    private static JTextArea inputArea;
-    private static JEditorPane outputArea;
+    private static JTextArea inputArea, outputArea;
+    //private static JEditorPane outputArea;
     private JScrollPane inputScroll, outputScroll;
     private static JSplitPane combinedArea;
+    //private static JFXPanel outputArea;
 
     // Constructor
     public TilesFrame() {
@@ -41,7 +47,9 @@ public class TilesFrame extends JFrame {
 
         //set up components
         inputArea = new JTextArea();
-        outputArea = new JEditorPane();
+        outputArea = new JTextArea();
+        //outputArea = new JEditorPane();
+        //outputArea = new JFXPanel();
         inputScroll = new JScrollPane( inputArea );
         outputScroll = new JScrollPane( outputArea );
         combinedArea = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, inputScroll, outputScroll );
@@ -55,32 +63,42 @@ public class TilesFrame extends JFrame {
         inputArea.setLineWrap( true );
         inputArea.setFont( new Font( "", Font.PLAIN, 16 ) );
         inputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
-        outputArea.setEditable( false );
+
         outputArea.setMargin( new Insets( 15,15,15,15 ) );
+        outputArea.setWrapStyleWord( true );
+        outputArea.setLineWrap( true );
+        outputArea.setFont( new Font( "", Font.PLAIN, 16 ) );
         outputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
-        outputArea.setContentType( "text/html" );
-        HTMLEditorKit kit = new HTMLEditorKit();
-        outputArea.setEditorKit(kit);
+        outputArea.setEditable( false );
+
+        //outputArea.setMargin( new Insets( 15,15,15,15 ) );
+        //outputArea.setMinimumSize( new Dimension( 0,0 ) ); //allows JSplitPane resize with mouse
+        //outputArea.setContentType( "text/html" );
+        //HTMLEditorKit kit = new HTMLEditorKit();
+        //outputArea.setEditorKit(kit);
+
+
+
         inputScroll.setBorder( BorderFactory.createEmptyBorder() );
         inputScroll.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         outputScroll.setBorder( BorderFactory.createEmptyBorder() );
         //outputScroll.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         combinedArea.setOneTouchExpandable( true );
         combinedArea.setBorder( BorderFactory.createEmptyBorder() );
-        combinedArea.setResizeWeight( 0.4 ); //JSplitPane bar in center of window
+        combinedArea.setResizeWeight( 0.5 ); //JSplitPane bar in center of window
 
-        //css styling for outputArea
-        StyleSheet styleSheet = kit.getStyleSheet();
-        styleSheet.addRule( "body {font-family: Helvetica, Arial, Sans-Serif;font-size: 14px;line-height: 1.6;padding: 10px;color: #000000;min-width: 0;overflow-wrap: break-word;word-wrap: break-word;}" );
+        //css styling for outputArea                                            <---will be used when rendering html is complete
+        //StyleSheet styleSheet = kit.getStyleSheet();
+        //styleSheet.addRule( "body {font-family: Helvetica, Arial, Sans-Serif;font-size: 14px;line-height: 1.6;padding: 10px;color: #000000;min-width: 0;overflow-wrap: break-word;word-wrap: break-word;}" );
         //styleSheet.addRule( "p {-webkit-flex-wrap: wrap;}" );
-        styleSheet.addRule( "a {color: #393939;text-decoration: none;}" );
-        styleSheet.addRule( "h1, h2, h3, h4, h5, h6 {font-weight: bold;margin: 20px 0 10px;}" );
-        styleSheet.addRule( "h1 {font-size: 28px;text-decoration: underline;}" );
-        styleSheet.addRule( "h2 {font-size: 24px;}" );
-        styleSheet.addRule( "h3 {font-size: 18px;}" );
-        styleSheet.addRule( "h4 {font-size: 16px;}" );
-        styleSheet.addRule( "h5 {font-size: 14px;}" );
-        styleSheet.addRule( "h6 {font-size: 12px;}" );
+        //styleSheet.addRule( "a {color: #393939;text-decoration: none;}" );
+        //styleSheet.addRule( "h1, h2, h3, h4, h5, h6 {font-weight: bold;margin: 20px 0 10px;}" );
+        //styleSheet.addRule( "h1 {font-size: 28px;text-decoration: underline;}" );
+        //styleSheet.addRule( "h2 {font-size: 24px;}" );
+        //styleSheet.addRule( "h3 {font-size: 18px;}" );
+        //styleSheet.addRule( "h4 {font-size: 16px;}" );
+        //styleSheet.addRule( "h5 {font-size: 14px;}" );
+        //styleSheet.addRule( "h6 {font-size: 12px;}" );
 
         //add components to editViewPanel
         editViewPanel.add( combinedArea );
@@ -99,6 +117,15 @@ public class TilesFrame extends JFrame {
             HtmlRenderer renderer = HtmlRenderer.builder().build();
             public void removeUpdate( DocumentEvent e ) {
                 Node document = parser.parse( inputArea.getText() ); //gets text from inputArea
+                /*Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        WebView webView = new WebView();
+                        webView.getEngine().loadContent(renderer.render( document ));
+                        outputArea.setScene(new Scene (webView));
+                    }
+                });*/
+
                 outputArea.setText( renderer.render( document ) ); //converts md to html and set text in outputArea to converted text
             }
 
