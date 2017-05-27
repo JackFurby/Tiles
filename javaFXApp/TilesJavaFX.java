@@ -13,6 +13,6 @@ public class TilesJavaFX extends Application {
 		primaryStage.show();
     }
  public static void main( String[] args ) {
-        launch(args);
+        launch( args );
     }
 }
