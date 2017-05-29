@@ -47,7 +47,6 @@ public class MenuFX {
         saveAsItm = new MenuItem();
         exitItm = new MenuItem();
         printItm = new MenuItem();
-        //cutItm = new MenuItem( new DefaultEditorKit.CutAction() );
         cutItm = new MenuItem();
         copyItm = new MenuItem();
         pasteItm = new MenuItem();
@@ -145,6 +144,7 @@ public class MenuFX {
         cutItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 System.out.println( "cutItm" );
+                //new DefaultEditorKit.CutAction()      <--- find out how to use this
             }
         });
         copyItm.setOnAction( new EventHandler<ActionEvent>() {
@@ -184,7 +184,7 @@ public class MenuFX {
         });
         //exits application
         exitItm.setOnAction(actionEvent -> Platform.exit());
-
+        //toggles application between fullscreen and windowed mode
         enterFullScreenItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 System.out.println( "enterFullScreenItm" );
@@ -203,31 +203,31 @@ public class MenuFX {
         //sets SplitPaneRatio to 1 to 2
         viewOneTwo.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "viewOneTwo" );
+                TilesMainWindow.setSplitPaneDevider( 1.0/3.0 );
             }
         });
         //sets SplitPaneRatio to 2 to 1
         viewTwoOne.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "viewTwoOne" );
+                TilesMainWindow.setSplitPaneDevider( 1.0/3.0 * 2 );
             }
         });
         //sets SplitPaneRatio to 1 to 1
         viewOneOne.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "viewOneOne" );
+                TilesMainWindow.setSplitPaneDevider( 0.5 );
             }
         });
         //sets SplitPaneRatio to 1 to 0
         hidePrevPane.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "hidePrevPane" );
+                TilesMainWindow.setSplitPaneDevider( 1 );
             }
         });
         //sets SplitPaneRatio to 0 to 1
         hideEditPane.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "hideEditPane" );
+                TilesMainWindow.setSplitPaneDevider( 0 );
             }
         });
         printItm.setOnAction( new EventHandler<ActionEvent>() {

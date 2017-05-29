@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.web.WebViewBuilder;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.SplitPane;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
@@ -19,18 +20,19 @@ import org.commonmark.renderer.html.HtmlRenderer;
 public class TilesMainWindow{
 
     private static Scene scene;
+    private RowConstraints row1;
+    private ColumnConstraints col1;
+    private GridPane mainPanel;
+    private BorderPane backPanel;
+    private TextArea inputArea;
+    private WebViewBuilder outputContent;
+    private static SplitPane inOutArea;
 
     public TilesMainWindow() {
 
         //web elements (used to render html)
         final WebView outputArea = new WebView();
         final WebEngine webEngine = outputArea.getEngine();
-
-        //elements for application layout
-        RowConstraints row1;
-        ColumnConstraints col1;
-        GridPane mainPanel;
-        BorderPane backPanel;
 
         //create main elements for application
         mainPanel = new GridPane();
@@ -39,27 +41,25 @@ public class TilesMainWindow{
 
         //set properties for main elements
         row1.setPercentHeight( 100 ); //percentage element takes up
-        col1.setPercentWidth( 50 ); //percentage element takes up
+        col1.setPercentWidth( 100 ); //percentage element takes up
         mainPanel.getRowConstraints().addAll( row1 );
-        mainPanel.getColumnConstraints().addAll( col1, col1 );
+        mainPanel.getColumnConstraints().addAll( col1 );
 
         // menu for window
         MenuFX menu = new MenuFX();
         menu.MenuFX();
         MenuBar menuBar = menu.getMenu();
 
-        //elements for application
-        TextArea inputArea;
-        WebViewBuilder outputContent;
-
         //create elements for application
         inputArea = new TextArea();
         outputContent = new WebViewBuilder();
+        inOutArea = new SplitPane();
 
         //set properties for elements
         inputArea.setWrapText( true );
-        mainPanel.add( inputArea, 0, 0 );
-        mainPanel.add( outputArea, 1, 0 );
+        inOutArea.getItems().add(inputArea);
+        inOutArea.getItems().add(outputArea);
+        mainPanel.add( inOutArea, 0, 0 );
 
         //makes pannel for content and menu and adds it to the scene
         backPanel = new BorderPane();
@@ -92,4 +92,7 @@ public class TilesMainWindow{
     public static Scene getScene() {
 		return scene;
 	}
+    public static void setSplitPaneDevider( double ratio ) {
+        inOutArea.setDividerPositions( ratio );
+    }
 }
