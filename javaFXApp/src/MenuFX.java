@@ -187,7 +187,7 @@ public class MenuFX {
         //toggles application between fullscreen and windowed mode
         enterFullScreenItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "enterFullScreenItm" );
+                TilesJavaFX.toggleMaximize();
             }
         });
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {
