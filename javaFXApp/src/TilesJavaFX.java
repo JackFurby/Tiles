@@ -24,7 +24,6 @@ public class TilesJavaFX extends Application {
     }
     //toggles application maximized
     public static void toggleMaximize() {
-
         if (stage.isMaximized()) {
             stage.setMaximized(false);
         } else {

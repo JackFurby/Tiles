@@ -141,20 +141,22 @@ public class MenuFX {
         viewMenu.getItems().add( hideEditPane );
 
         //ActionListener for menu items
+        //cuts text from mainWindow
         cutItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "cutItm" );
-                //new DefaultEditorKit.CutAction()      <--- find out how to use this
+                TilesMainWindow.MainWinCut();
             }
         });
+        //copys text from mainWindow
         copyItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "copyItm" );
+                TilesMainWindow.MainWinCopy();
             }
         });
+        //pastes text to mainWindow
         pasteItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "pasteItm" );
+                TilesMainWindow.MainWinPaste();
             }
         });
         newItm.setOnAction( new EventHandler<ActionEvent>() {

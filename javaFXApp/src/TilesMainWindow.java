@@ -24,8 +24,8 @@ public class TilesMainWindow{
     private ColumnConstraints col1;
     private GridPane mainPanel;
     private BorderPane backPanel;
-    private TextArea inputArea;
-    private WebViewBuilder outputContent;
+    private static TextArea inputArea;
+    private static WebViewBuilder outputContent;
     private static SplitPane inOutArea;
 
     public TilesMainWindow() {
@@ -95,4 +95,14 @@ public class TilesMainWindow{
     public static void setSplitPaneDevider( double ratio ) {
         inOutArea.setDividerPositions( ratio );
     }
+    public static void MainWinCopy() { //                                                           <---- need to add copy to inOutArea
+        inputArea.copy();
+    }
+    public static void MainWinPaste() { //                                                          <---- need to add paste to inOutArea
+        inputArea.paste();
+    }
+    public static void MainWinCut() { //                                                            <---- need to add cut to inOutArea
+        inputArea.cut();
+    }
+
 }
