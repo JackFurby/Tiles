@@ -20,9 +20,8 @@ Currently there is a interface and input is converted to html before being rende
     * New
     * Open
     * Open recent
-    * Save
     * Export
         * PDF
         * HTML
     * Print
-    * Check current document for changes when making a new file and closing the application
+    * Check current document for changes when making a new file

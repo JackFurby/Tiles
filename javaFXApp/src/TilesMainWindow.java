@@ -11,6 +11,7 @@ import javafx.scene.web.WebViewBuilder;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.SplitPane;
+import java.io.File;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
@@ -19,6 +20,12 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 public class TilesMainWindow{
 
+    //global variables
+    public static File currentFilePath;
+    public static Boolean pathSet;
+    public static Boolean fileChange;
+
+    //local variables
     private static Scene scene;
     private RowConstraints row1;
     private ColumnConstraints col1;
@@ -29,6 +36,10 @@ public class TilesMainWindow{
     private static SplitPane inOutArea;
 
     public TilesMainWindow() {
+
+        //set starting properties for global variables
+        fileChange = false;
+        pathSet = false;
 
         //web elements (used to render html)
         final WebView outputArea = new WebView();
@@ -85,6 +96,7 @@ public class TilesMainWindow{
             HtmlRenderer renderer = HtmlRenderer.builder().build();
             Node document = parser.parse( newValue ); //gets text from inputArea
             webEngine.loadContent(renderer.render( document )); //converts md to html and set text in outputArea to converted text (rendered html)
+            fileChange = true; //lets application know a change has been made
         });
     }
 

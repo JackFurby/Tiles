@@ -8,6 +8,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.event.EventHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import java.io.PrintWriter;
+import java.io.File;
 
 public class MenuFX {
 
@@ -172,9 +174,24 @@ public class MenuFX {
                 System.out.println( "openRecentItm" );
             }
         });
+        //saves a file that has previously been saved
         saveItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "saveItm" );
+                if (TilesMainWindow.pathSet) { //if file has been previously saved
+                    try {
+                        PrintWriter output = new PrintWriter( TilesMainWindow.currentFilePath ); //sets name and location of file
+                        String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
+                        for ( int i = 0; i < outputText.length; i++ ) {
+                            output.println( outputText[i].toString() ); //saves lines of text
+                        }
+                        output.close();
+                        TilesMainWindow.fileChange = false; //resets fileChange
+                    } catch ( Exception ex ) {
+                        System.out.println( ex );
+                    }
+                } else {
+                    TilesJavaFX.openFileChooserSaveAs();
+                }
             }
         });
         //saves text in inputArea to a md file
@@ -184,7 +201,11 @@ public class MenuFX {
             }
         });
         //exits application
-        exitItm.setOnAction(actionEvent -> Platform.exit());
+        exitItm.setOnAction( new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                TilesJavaFX.exitCheck();
+            }
+        });
         //toggles application between fullscreen and windowed mode
         enterFullScreenItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
