@@ -1,5 +1,3 @@
-import javax.swing.text.DefaultEditorKit;
-
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -179,9 +177,10 @@ public class MenuFX {
                 System.out.println( "saveItm" );
             }
         });
+        //saves text in inputArea to a md file
         saveAsItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "saveAsItm" );
+                TilesJavaFX.openFileChooserSaveAs();
             }
         });
         //exits application

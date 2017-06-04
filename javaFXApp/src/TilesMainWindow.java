@@ -104,5 +104,9 @@ public class TilesMainWindow{
     public static void MainWinCut() { //                                                            <---- need to add cut to inOutArea
         inputArea.cut();
     }
-
+    //returns an array of lines in inputArea
+    public static String[] getInputText() {
+        String[] lines = inputArea.getText().split("\\n");
+        return lines;
+    }
 }
