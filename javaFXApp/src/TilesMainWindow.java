@@ -12,11 +12,11 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.SplitPane;
 import java.io.File;
+import java.util.List;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-
 
 public class TilesMainWindow{
 
@@ -120,5 +120,13 @@ public class TilesMainWindow{
     public static String[] getInputText() {
         String[] lines = inputArea.getText().split("\\n");
         return lines;
+    }
+    //sets text in inputarea (will replace whatever is currently there)
+    public static void setInputArea(  List<String> lines ) {
+        inputArea.clear();
+        for (int i=0; i < lines.size(); i++) {
+            inputArea.appendText(lines.get(i) + "\n");
+        }
+        TilesMainWindow.fileChange = false;
     }
 }

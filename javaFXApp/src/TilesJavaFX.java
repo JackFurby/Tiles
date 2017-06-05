@@ -10,8 +10,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import java.util.Optional;
 import javafx.stage.WindowEvent;
-
 import javafx.application.Platform;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TilesJavaFX extends Application {
 
@@ -80,12 +82,44 @@ public class TilesJavaFX extends Application {
             }
         }
     }
+    //opens file menu to select a file to open in application
+    public static List<String> openFileChooserOpen() {
+        List<String> lines = new ArrayList<String>(); //list of lines in file to open
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open");
+
+        //Set extension filter
+        FileChooser.ExtensionFilter mdFileType = new FileChooser.ExtensionFilter("Markdown files (*.md)", "*.md");
+        FileChooser.ExtensionFilter txtFileType = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter ownFileType = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
+        fileChooser.getExtensionFilters().addAll(mdFileType, txtFileType, ownFileType);
+
+        //displays open window
+        File file = fileChooser.showOpenDialog(stage);
+
+        //opens selected file
+        if (file != null) {
+            Scanner in;
+            try {
+                in = new Scanner( file );
+                while ( in.hasNextLine() ) {
+                    lines.add(in.nextLine().toString());
+                }
+                TilesMainWindow.fileChange = false; //resets fileChange
+                TilesMainWindow.currentFilePath = file;
+                TilesMainWindow.pathSet = true;
+            } catch ( Exception error ) {
+                System.out.println( error );
+            }
+        }
+        return lines;
+    }
     //displays warning window alerting about unsaved changes
     public static Boolean changeWarning() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Changes made");
         alert.setHeaderText("Changes have been made since last save");
-        alert.setContentText("Do you want to exit without saving?");
+        alert.setContentText("Do you want to continue without saving?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
@@ -103,5 +137,19 @@ public class TilesJavaFX extends Application {
         } else { //no change has been made to current document
             Platform.exit();
         }
+    }
+    //checks for changes to current document
+    public static Boolean openCheck() {
+        Boolean checkOption;
+        if (TilesMainWindow.fileChange) { //if file has been previously saved
+            if (changeWarning()){
+                checkOption = true;
+            } else {
+                checkOption = false;
+            }
+        } else { //no change has been made to current document
+            checkOption = true;
+        }
+        return checkOption;
     }
 }

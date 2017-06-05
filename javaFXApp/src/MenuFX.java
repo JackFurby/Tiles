@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import java.io.PrintWriter;
 import java.io.File;
+import java.util.List;
 
 public class MenuFX {
 
@@ -164,9 +165,14 @@ public class MenuFX {
                 System.out.println( "newItm" );
             }
         });
+        //opens a text or md file
         openItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "openItm" );
+                List<String> fileLines;
+                if (TilesJavaFX.openCheck()) { //if no changes were made to current file or user wants to continue without saving
+                    fileLines = TilesJavaFX.openFileChooserOpen();
+                    TilesMainWindow.setInputArea(fileLines);
+                }
             }
         });
         openRecentItm.setOnAction( new EventHandler<ActionEvent>() {

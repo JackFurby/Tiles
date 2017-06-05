@@ -18,7 +18,6 @@ Currently there is a interface and input is converted to html before being rende
 * Spell check
 * File menu
     * New
-    * Open
     * Open recent
     * Export
         * PDF
