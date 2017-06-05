@@ -35,7 +35,9 @@ public class TilesJavaFX extends Application {
             public void handle(WindowEvent event) {
                 // consume event
                 event.consume();
-                exitCheck();
+                if ( changeCheck() ) {
+                    primaryStage.close(); //only close current stage incase multiple stages are open
+                }
             }
         });
     }
@@ -129,17 +131,7 @@ public class TilesJavaFX extends Application {
         }
     }
     //checks for changes to current document
-    public static void exitCheck() {
-        if (TilesMainWindow.fileChange) { //if file has been previously saved
-            if (changeWarning()){
-                Platform.exit();
-            }
-        } else { //no change has been made to current document
-            Platform.exit();
-        }
-    }
-    //checks for changes to current document
-    public static Boolean openCheck() {
+    public static Boolean changeCheck() {
         Boolean checkOption;
         if (TilesMainWindow.fileChange) { //if file has been previously saved
             if (changeWarning()){
@@ -151,5 +143,25 @@ public class TilesJavaFX extends Application {
             checkOption = true;
         }
         return checkOption;
+    }
+    //starts a new stage to allow multiple instances of the application
+    public static void newWindow() {
+        TilesMainWindow newWindow = new TilesMainWindow();
+        Stage newStage = new Stage();
+        newStage.setTitle( "Tiles (Markdown)" );
+        newStage.setScene( newWindow.getScene() );
+        newStage.show();
+
+        //on application exit
+        newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                // consume event
+                event.consume();
+                if ( changeCheck() ) {
+                    newStage.close(); //only close current stage incase multiple stages are open
+                }
+            }
+        });
     }
 }

@@ -17,10 +17,8 @@ Currently there is a interface and input is converted to html before being rende
 * Syntax highlighting
 * Spell check
 * File menu
-    * New
     * Open recent
     * Export
         * PDF
         * HTML
     * Print
-    * Check current document for changes when making a new file

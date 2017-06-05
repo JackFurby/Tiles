@@ -162,14 +162,14 @@ public class MenuFX {
         });
         newItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "newItm" );
+                TilesJavaFX.newWindow();
             }
         });
         //opens a text or md file
         openItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 List<String> fileLines;
-                if (TilesJavaFX.openCheck()) { //if no changes were made to current file or user wants to continue without saving
+                if (TilesJavaFX.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
                     fileLines = TilesJavaFX.openFileChooserOpen();
                     TilesMainWindow.setInputArea(fileLines);
                 }
@@ -209,7 +209,7 @@ public class MenuFX {
         //exits application
         exitItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.exitCheck();
+                TilesJavaFX.changeCheck();
             }
         });
         //toggles application between fullscreen and windowed mode
