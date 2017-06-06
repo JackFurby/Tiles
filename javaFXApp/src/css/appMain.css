@@ -1,3 +1,19 @@
-#outputArea {
-    -fx-background-color: #CCFF99;
+.root{
+    -fx-font-size: 9pt;
+}
+#inputArea {
+    -fx-font-size: 9pt;
+    -fx-background-color: #000000;
+    -fx-background-radius:0;
+    -fx-text-fill: #ffffff;
+}
+#inputArea .content {
+    -fx-background-color: #000000;
+    -fx-background-radius:0;
+}
+#menuBar {
+    -fx-background-color: #f2f2f2;
+}
+#menuBar .menu .menu-item:focused, #menuBar .menu:showing, #menuBar .menu:hover {
+    -fx-background-color: #8c8c8c;
 }

@@ -10,7 +10,7 @@ Currently there is a interface and input is converted to html before being rende
 ### To do
 * Improve cut, copy and paste
 * Help menu
-* CSS for application
+* CSS for application (WIP)
 * CSS for output
 * Preferences / settings
 * Config

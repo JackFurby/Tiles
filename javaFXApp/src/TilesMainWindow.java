@@ -79,6 +79,13 @@ public class TilesMainWindow{
         backPanel.setPrefSize( 640, 480 ); //set size of panel
         scene = new Scene(backPanel);
 
+        //setting ID's to elements
+        inputArea.setId("inputArea");
+        menuBar.setId("menuBar");
+
+        //css for application
+        scene.getStylesheets().add("css/appMain.css");
+
 
 
 
