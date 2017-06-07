@@ -13,7 +13,7 @@ Currently there is a interface and input is converted to html before being rende
 * CSS for application (WIP)
 * CSS for output (WIP)
 * Preferences / settings
-* Config
+* Config (WIP)
 * Syntax highlighting
 * Spell check
 * File menu

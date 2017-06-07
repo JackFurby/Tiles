@@ -19,6 +19,7 @@ public class TilesJavaFX extends Application {
 
     private TilesMainWindow mainWindow;
     private static Stage stage;
+    private static ConfigFX config = new ConfigFX();
 
     @Override
     public void start( Stage primaryStage ) throws Exception {
@@ -29,13 +30,19 @@ public class TilesJavaFX extends Application {
         primaryStage.setScene( mainWindow.getScene() );
         primaryStage.show();
 
+        //gets properties from config and sets them
+        primaryStage.setHeight(config.getHeight());
+        primaryStage.setWidth(config.getWidth());
+
         //on application exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                // consume event
                 event.consume();
                 if ( changeCheck() ) {
+                    config.setWidth( new Double(primaryStage.getWidth()).toString() );
+                    config.setHeight( new Double(primaryStage.getHeight()).toString() );
+                    config.saveConfig(); //saves current application width and height
                     primaryStage.close(); //only close current stage incase multiple stages are open
                 }
             }
@@ -130,11 +137,19 @@ public class TilesJavaFX extends Application {
             return false;
         }
     }
+    //displays error message with a given message
+    public static void errorPopup( String message ) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle( "Error" );
+        alert.setHeaderText("Somthing went wrong");
+        alert.setContentText("Look up" + message + "for more information");
+        alert.showAndWait();
+    }
     //checks for changes to current document
     public static Boolean changeCheck() {
         Boolean checkOption;
         if (TilesMainWindow.fileChange) { //if file has been previously saved
-            if (changeWarning()){
+            if (changeWarning()) {
                 checkOption = true;
             } else {
                 checkOption = false;
@@ -152,6 +167,10 @@ public class TilesJavaFX extends Application {
         newStage.setScene( newWindow.getScene() );
         newStage.show();
 
+        //gets properties from config and sets them
+        newStage.setHeight( config.getHeight() );
+        newStage.setWidth( config.getWidth() );
+
         //on application exit
         newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -159,6 +178,9 @@ public class TilesJavaFX extends Application {
                 // consume event
                 event.consume();
                 if ( changeCheck() ) {
+                    config.setWidth( new Double(newStage.getWidth()).toString() );
+                    config.setHeight( new Double(newStage.getHeight()).toString() );
+                    config.saveConfig(); //saves current application width and height
                     newStage.close(); //only close current stage incase multiple stages are open
                 }
             }

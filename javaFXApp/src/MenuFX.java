@@ -19,7 +19,8 @@ public class MenuFX {
     private static MenuBar menuBar;
     private static MenuItem printItm, newItm, openItm, openRecentItm, exitItm,
         cutItm, copyItm, pasteItm, saveItm, saveAsItm, enterFullScreenItm, pdfExpItm,
-        htmlExpItm, viewOneTwo, viewTwoOne, viewOneOne, hidePrevPane, hideEditPane;
+        htmlExpItm, viewOneTwo, viewTwoOne, viewOneOne, hidePrevPane, hideEditPane,
+        preferencesItm;
     private static Menu editMenu, fileMenu, viewMenu, helpMenu, exportMenu;
 
 
@@ -59,6 +60,7 @@ public class MenuFX {
         hideEditPane = new MenuItem();
         pdfExpItm = new MenuItem();
         htmlExpItm = new MenuItem();
+        preferencesItm = new MenuItem();
 
         //set properties for elements
         copyItm.setText( "Copy" );
@@ -109,11 +111,16 @@ public class MenuFX {
         hideEditPane.setText( "Hide Editor Pane" );
         hideEditPane.setMnemonicParsing( true );
         hideEditPane.setAccelerator( new KeyCodeCombination( KeyCode.E, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN ) );
+        preferencesItm.setText( "Preferences" );
+        preferencesItm.setMnemonicParsing( true );
+        preferencesItm.setAccelerator( new KeyCodeCombination( KeyCode.P, KeyCombination.CONTROL_DOWN ) );
 
         //adding items to fileMenu
         fileMenu.getItems().add( newItm );
         fileMenu.getItems().add( openItm );
         fileMenu.getItems().add( openRecentItm );
+        fileMenu.getItems().add( new SeparatorMenuItem() );
+        fileMenu.getItems().add( preferencesItm );
         fileMenu.getItems().add( new SeparatorMenuItem() );
         fileMenu.getItems().add( saveItm );
         fileMenu.getItems().add( saveAsItm );
@@ -211,7 +218,9 @@ public class MenuFX {
         //exits application
         exitItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.changeCheck();
+                if (TilesJavaFX.changeCheck()) {
+                    Platform.exit();
+                }
             }
         });
         //toggles application between fullscreen and windowed mode
@@ -263,6 +272,11 @@ public class MenuFX {
         printItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 System.out.println( "printItm" );
+            }
+        });
+        preferencesItm.setOnAction( new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.out.println( "preferencesItm" );
             }
         });
 

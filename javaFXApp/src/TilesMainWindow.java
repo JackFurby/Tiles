@@ -80,6 +80,7 @@ public class TilesMainWindow{
         //setting ID's to elements
         inputArea.setId("inputArea");
         menuBar.setId("menuBar");
+        inOutArea.setId("inOutArea");
 
         //css for application
         scene.getStylesheets().add("css/appMain.css"); //application interface
