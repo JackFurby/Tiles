@@ -1,14 +1,15 @@
 .root{
     -fx-font-size: 9pt;
+    -fx-font-family: 'Open Sans', sans-serif;
 }
 #inputArea {
-    -fx-font-size: 9pt;
-    -fx-background-color: #000000;
+    -fx-font-size: 11pt;
+    -fx-background-color: #0d0d0d;
     -fx-background-radius:0;
     -fx-text-fill: #ffffff;
 }
 #inputArea .content {
-    -fx-background-color: #000000;
+    -fx-background-color: #0d0d0d;
     -fx-background-radius:0;
 }
 #menuBar {

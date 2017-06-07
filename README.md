@@ -11,7 +11,7 @@ Currently there is a interface and input is converted to html before being rende
 * Improve cut, copy and paste
 * Help menu
 * CSS for application (WIP)
-* CSS for output
+* CSS for output (WIP)
 * Preferences / settings
 * Config
 * Syntax highlighting

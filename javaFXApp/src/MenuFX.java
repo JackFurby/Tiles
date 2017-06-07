@@ -171,7 +171,9 @@ public class MenuFX {
                 List<String> fileLines;
                 if (TilesJavaFX.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
                     fileLines = TilesJavaFX.openFileChooserOpen();
-                    TilesMainWindow.setInputArea(fileLines);
+                    if (fileLines.isEmpty() == false) {
+                        TilesMainWindow.setInputArea(fileLines);
+                    }
                 }
             }
         });

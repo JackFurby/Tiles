@@ -32,7 +32,6 @@ public class TilesMainWindow{
     private GridPane mainPanel;
     private BorderPane backPanel;
     private static TextArea inputArea;
-    private static WebViewBuilder outputContent;
     private static SplitPane inOutArea;
 
     public TilesMainWindow() {
@@ -63,7 +62,6 @@ public class TilesMainWindow{
 
         //create elements for application
         inputArea = new TextArea();
-        outputContent = new WebViewBuilder();
         inOutArea = new SplitPane();
 
         //set properties for elements
@@ -84,18 +82,8 @@ public class TilesMainWindow{
         menuBar.setId("menuBar");
 
         //css for application
-        scene.getStylesheets().add("css/appMain.css");
-
-
-
-
-        //String css = TilesMainWindow.class.getResource("appMain.css").toExternalForm();             <-------    some of this may be useful for styling
-        //scene.getStylesheets().clear();
-        //scene.getStylesheets().add(css);
-        //scene.getStylesheets().add(this.getClass().getResource("appMain.css").toExternalForm());
-        //scene.getStylesheets().add("css/appMain.css");
-
-
+        scene.getStylesheets().add("css/appMain.css"); //application interface
+        webEngine.setUserStyleSheetLocation(getClass().getResource("css/defaultOut.css").toString()); //outputArea
 
         //listener for changes to inputArea
         inputArea.textProperty().addListener( ( observable, oldValue, newValue ) -> {
