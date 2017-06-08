@@ -25,14 +25,9 @@ public class TilesJavaFX extends Application {
     public void start( Stage primaryStage ) throws Exception {
 
         mainWindow = new TilesMainWindow();
-        this.stage = primaryStage;
         primaryStage.setTitle( "Tiles (Markdown)" );
         primaryStage.setScene( mainWindow.getScene() );
         primaryStage.show();
-
-        //gets properties from config and sets them
-        primaryStage.setHeight(config.getHeight());
-        primaryStage.setWidth(config.getWidth());
 
         //on application exit
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -40,9 +35,6 @@ public class TilesJavaFX extends Application {
             public void handle(WindowEvent event) {
                 event.consume();
                 if ( changeCheck() ) {
-                    config.setWidth( new Double(primaryStage.getWidth()).toString() );
-                    config.setHeight( new Double(primaryStage.getHeight()).toString() );
-                    config.saveConfig(); //saves current application width and height
                     primaryStage.close(); //only close current stage incase multiple stages are open
                 }
             }
@@ -53,11 +45,11 @@ public class TilesJavaFX extends Application {
         launch( args );
     }
     //toggles application maximized
-    public static void toggleMaximize() {
-        if (stage.isMaximized()) {
-            stage.setMaximized(false);
+    public static void toggleMaximize( Stage currentStage ) {
+        if (currentStage.isMaximized()) {
+            currentStage.setMaximized(false);
         } else {
-            stage.setMaximized(true);
+            currentStage.setMaximized(true);
         }
     }
     //opens fileChooser and saves file
@@ -158,32 +150,5 @@ public class TilesJavaFX extends Application {
             checkOption = true;
         }
         return checkOption;
-    }
-    //starts a new stage to allow multiple instances of the application
-    public static void newWindow() {
-        TilesMainWindow newWindow = new TilesMainWindow();
-        Stage newStage = new Stage();
-        newStage.setTitle( "Tiles (Markdown)" );
-        newStage.setScene( newWindow.getScene() );
-        newStage.show();
-
-        //gets properties from config and sets them
-        newStage.setHeight( config.getHeight() );
-        newStage.setWidth( config.getWidth() );
-
-        //on application exit
-        newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                // consume event
-                event.consume();
-                if ( changeCheck() ) {
-                    config.setWidth( new Double(newStage.getWidth()).toString() );
-                    config.setHeight( new Double(newStage.getHeight()).toString() );
-                    config.saveConfig(); //saves current application width and height
-                    newStage.close(); //only close current stage incase multiple stages are open
-                }
-            }
-        });
     }
 }

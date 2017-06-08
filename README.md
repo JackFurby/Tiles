@@ -16,6 +16,7 @@ Currently there is a interface and input is converted to html before being rende
 * Config (WIP)
 * Syntax highlighting
 * Spell check
+* Fix toggle maximise button
 * File menu
     * Open recent
     * Export

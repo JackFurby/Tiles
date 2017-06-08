@@ -36,3 +36,28 @@ h6, .h6 {
 p, .p {
     font-size: 1em;
 }
+blockquote, .blockquote {
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    border-left: 10px solid;
+    border-left-color: #808080;
+    padding-left: 0.5em;
+    margin: 0;
+}
+pre, code { /* code */
+    background-color: #f0f0f0;
+    border: 1px solid;
+    border-color: #999999;
+    white-space: pre-wrap;
+}
+pre { /* code block */
+    border-radius: 5px;
+    padding: 0.5em;
+}
+code { /* inline code */
+    border-radius: 3px;
+}
+pre code { /*remove styling for inline code in code block */
+    background-color: inherit;
+    border: 0;
+}

@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
-import java.awt.GraphicsEnvironment;
 
 public class ConfigFX {
 
@@ -33,8 +32,6 @@ public class ConfigFX {
     public void newConfigFile() {
         try {
             PrintWriter output = new PrintWriter( "config.txt" );
-            output.println( "width:640" );
-            output.println( "height:480" );
             output.close();
         } catch ( Exception outError ) {
             TilesJavaFX.errorPopup( outError.toString() );
@@ -46,23 +43,9 @@ public class ConfigFX {
         //saving config file
         try {
             PrintWriter output = new PrintWriter( "config.txt" );
-            output.println( "width:" + getWidth() );
-            output.println( "height:" + getHeight() );
             output.close();
         } catch ( Exception outError ) {
             TilesJavaFX.errorPopup( outError.toString() );
         }
-    }
-    public static double getWidth() {
-        return Double.parseDouble( configItems.get( "width" ) );
-    }
-    public static double getHeight() {
-        return Double.parseDouble( configItems.get( "height" ) );
-    }
-    public static void setWidth( String newWidth ) {
-        configItems.put( "width", newWidth );
-    }
-    public static void setHeight( String newHeight ) {
-        configItems.put( "height", newHeight );
     }
 }

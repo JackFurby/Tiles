@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import java.io.PrintWriter;
 import java.io.File;
 import java.util.List;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class MenuFX {
 
@@ -169,7 +171,9 @@ public class MenuFX {
         });
         newItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.newWindow();
+                if (TilesJavaFX.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                    TilesMainWindow.clearInputArea();
+                }
             }
         });
         //opens a text or md file
@@ -226,7 +230,9 @@ public class MenuFX {
         //toggles application between fullscreen and windowed mode
         enterFullScreenItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.toggleMaximize();
+                Window theStage = TilesMainWindow.getScene().getWindow();
+                TilesJavaFX.toggleMaximize((Stage)theStage);
+                System.out.println((Stage)theStage);
             }
         });
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {

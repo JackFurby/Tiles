@@ -93,6 +93,8 @@ public class TilesMainWindow{
             Node document = parser.parse( newValue ); //gets text from inputArea
             webEngine.loadContent(renderer.render( document )); //converts md to html and set text in outputArea to converted text (rendered html)
             fileChange = true; //lets application know a change has been made
+
+            System.out.println(renderer.render( document )); //used for development
         });
     }
 
@@ -111,6 +113,10 @@ public class TilesMainWindow{
     }
     public static void MainWinCut() { //                                                            <---- need to add cut to inOutArea
         inputArea.cut();
+    }
+    public static void clearInputArea() {
+        inputArea.clear();
+        TilesMainWindow.fileChange = false;
     }
     //returns an array of lines in inputArea
     public static String[] getInputText() {
