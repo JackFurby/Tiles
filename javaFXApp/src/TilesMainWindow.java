@@ -14,6 +14,7 @@ import javafx.scene.control.SplitPane;
 import java.io.File;
 import java.util.List;
 
+
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -94,7 +95,7 @@ public class TilesMainWindow{
             webEngine.loadContent(renderer.render( document )); //converts md to html and set text in outputArea to converted text (rendered html)
             fileChange = true; //lets application know a change has been made
 
-            System.out.println(renderer.render( document )); //used for development
+            //System.out.println(renderer.render( document )); //used for development
         });
     }
 
