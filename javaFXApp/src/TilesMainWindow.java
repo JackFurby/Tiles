@@ -91,7 +91,8 @@ public class TilesMainWindow{
             Parser parser = Parser.builder().build(); //parser for converting md to html
             HtmlRenderer renderer = HtmlRenderer.builder().build();
             Node document = parser.parse( newValue ); //gets text from inputArea
-            webEngine.loadContent(renderer.render( document )); //converts md to html and set text in outputArea to converted text (rendered html)
+            //converts md to html and set text in outputArea to converted text (rendered html), base tag is used for images in local directory
+            webEngine.loadContent("<html><head><base href=\'file:///" + currentFilePath + "\'/></head><body>" + renderer.render( document ) + "</body></html>");
             fileChange = true; //lets application know a change has been made
 
             System.out.println(renderer.render( document )); //used for development
