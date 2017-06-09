@@ -14,6 +14,7 @@ import javafx.scene.control.SplitPane;
 import java.io.File;
 import java.util.List;
 
+
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -95,7 +96,7 @@ public class TilesMainWindow{
             webEngine.loadContent("<html><head><base href=\'file:///" + currentFilePath + "\'/></head><body>" + renderer.render( document ) + "</body></html>");
             fileChange = true; //lets application know a change has been made
 
-            System.out.println(renderer.render( document )); //used for development
+            //System.out.println(renderer.render( document )); //used for development
         });
     }
 
