@@ -17,7 +17,6 @@ Currently there is a interface and input is converted to html before being rende
 * Syntax highlighting
 * Spell check
 * Fix toggle maximise button
-* Fix img links requiring "File:///" before the file location
 * File menu
     * Open recent
     * Export
