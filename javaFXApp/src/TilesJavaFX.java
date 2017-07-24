@@ -53,6 +53,50 @@ public class TilesJavaFX extends Application {
         }
     }
     //opens fileChooser and saves file
+    public static void openFileChooserExport( Boolean exportType) { //true means save as html
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save as");
+
+        //Set extension filter
+        FileChooser.ExtensionFilter pdfFileType = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+        FileChooser.ExtensionFilter htmlFileType = new FileChooser.ExtensionFilter("HTML files (*.html)", "*.html");
+        FileChooser.ExtensionFilter txtFileType = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter ownFileType = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
+        if (exportType) { //sets export type on fileChoser open
+            fileChooser.getExtensionFilters().addAll(htmlFileType, pdfFileType, txtFileType, ownFileType);
+        } else {
+            fileChooser.getExtensionFilters().addAll(pdfFileType, htmlFileType, txtFileType, ownFileType);
+        }
+        //displays save as window
+        File file = fileChooser.showSaveDialog(stage);
+
+        //saves file
+        if (file != null) {
+            if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") { //saving as HTML         <---look for a better way to do this
+                try {
+                    PrintWriter output = new PrintWriter( file ); //sets name and location of file
+                    String outputText = TilesMainWindow.renderedOut; //gets HTML to save
+                    output.println( outputText ); //saves HTML
+                    Scanner in;
+                    in = new Scanner( TilesMainWindow.outputCssSheet );
+                    output.println("<style>"); //start of style
+                    while ( in.hasNextLine() ) {
+                        output.println( in.nextLine().toString() ); //saves lines of text
+                    }
+                    output.println("</style>"); //end of style
+                    TilesMainWindow.fileChange = false; //resets fileChange
+                    TilesMainWindow.currentFilePath = file;
+                    TilesMainWindow.pathSet = true;
+                    output.close();
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+            else {                                                              //<------ add exporting PDF here
+            }
+        }
+    }
+    //opens fileChooser and exports file
     public static void openFileChooserSaveAs() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");

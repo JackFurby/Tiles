@@ -21,5 +21,5 @@ Currently there is a interface and input is converted to html before being rende
     * Open recent
     * Export
         * PDF
-        * HTML
+        * HTML (WIP)
     * Print

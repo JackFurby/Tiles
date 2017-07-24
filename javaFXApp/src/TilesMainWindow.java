@@ -25,6 +25,8 @@ public class TilesMainWindow{
     public static File currentFilePath;
     public static Boolean pathSet;
     public static Boolean fileChange;
+    public static File outputCssSheet;
+    public static String renderedOut;
 
     //local variables
     private static Scene scene;
@@ -34,6 +36,7 @@ public class TilesMainWindow{
     private BorderPane backPanel;
     private static TextArea inputArea;
     private static SplitPane inOutArea;
+    private File defaultCssFile;
 
     public TilesMainWindow() {
 
@@ -84,8 +87,16 @@ public class TilesMainWindow{
         inOutArea.setId("inOutArea");
 
         //css for application
-        scene.getStylesheets().add("css/appMain.css"); //application interface
-        webEngine.setUserStyleSheetLocation(getClass().getResource("css/defaultOut.css").toString()); //outputArea
+        scene.getStylesheets().add("css/application/appMain.css"); //application interface
+        String defaultCssFilePath = "css/output/defaultOut.css";
+        webEngine.setUserStyleSheetLocation(getClass().getResource(defaultCssFilePath).toString()); //outputArea
+
+        try {
+            outputCssSheet = new File(defaultCssFilePath);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+
 
         //listener for changes to inputArea
         inputArea.textProperty().addListener( ( observable, oldValue, newValue ) -> {
@@ -93,7 +104,8 @@ public class TilesMainWindow{
             HtmlRenderer renderer = HtmlRenderer.builder().build();
             Node document = parser.parse( newValue ); //gets text from inputArea
             //converts md to html and set text in outputArea to converted text (rendered html), base tag is used for images in local directory
-            webEngine.loadContent("<html><head><base href=\'file:///" + currentFilePath + "\'/></head><body>" + renderer.render( document ) + "</body></html>");
+            renderedOut = renderer.render( document );
+            webEngine.loadContent("<html><head><base href=\'file:///" + currentFilePath + "\'/></head><body>" + renderedOut + "</body></html>");
             fileChange = true; //lets application know a change has been made
 
             //System.out.println(renderer.render( document )); //used for development

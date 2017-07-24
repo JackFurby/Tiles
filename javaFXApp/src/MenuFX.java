@@ -242,7 +242,8 @@ public class MenuFX {
         });
         htmlExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "htmlExpItm" );
+                TilesJavaFX.openFileChooserExport(true); //true means save as html
+
             }
         });
         //sets SplitPaneRatio to 1 to 2
