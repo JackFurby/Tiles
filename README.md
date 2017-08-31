@@ -10,16 +10,15 @@ Currently there is a interface and input is converted to html before being rende
 ### To do
 * Improve cut, copy and paste
 * Help menu
-* CSS for application (WIP)
+* CSS for application (add as application is developed)
 * CSS for output (WIP)
 * Preferences / settings
 * Config (WIP)
-* Syntax highlighting
-* Spell check
+* Syntax highlighting (JavaFX code area?)
+* Spell check (JavaFX code area?)
 * Fix toggle maximise button
 * File menu
     * Open recent
     * Export
         * PDF
-        * HTML (WIP)
     * Print
