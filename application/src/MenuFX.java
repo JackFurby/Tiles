@@ -169,6 +169,7 @@ public class MenuFX {
                 TilesMainWindow.MainWinPaste();
             }
         });
+        //clears application input area and displays save warning if unsaved changes are present
         newItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 if (TilesJavaFX.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
@@ -235,11 +236,13 @@ public class MenuFX {
                 System.out.println((Stage)theStage);
             }
         });
+        //exports current open item as PDF
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "pdfExpItm" );
+                TilesJavaFX.openFileChooserExport(false); //false means save as pdf
             }
         });
+        //exports current open item as HTML
         htmlExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 TilesJavaFX.openFileChooserExport(true); //true means save as html

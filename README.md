@@ -3,6 +3,7 @@ Tiles is a markdown editor which is made in Java. It is currently not in a funct
 
 ### Libraries
 For the conversion of md files to html I have used commonmark-java. More information can be found here: https://github.com/atlassian/commonmark-java
+For exporting to PDF I used iText. More information can be found here: https://developers.itextpdf.com/
 
 ### Current development
 Currently there is a interface and input is converted to html before being rendered. A few buttons in the menu work.
@@ -19,6 +20,4 @@ Currently there is a interface and input is converted to html before being rende
 * Fix toggle maximise button
 * File menu
     * Open recent
-    * Export
-        * PDF
     * Print

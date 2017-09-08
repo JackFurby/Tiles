@@ -15,6 +15,22 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
+
+import com.itextpdf.tool.xml.pipeline.css.CSSResolver;
+import com.itextpdf.tool.xml.parser.XMLParser;
+import com.itextpdf.tool.xml.XMLWorker;
+import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
+import com.itextpdf.tool.xml.pipeline.end.PdfWriterPipeline;
+import com.itextpdf.tool.xml.html.Tags;
+import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
+import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
+
 public class TilesJavaFX extends Application {
 
     private TilesMainWindow mainWindow;
@@ -52,8 +68,8 @@ public class TilesJavaFX extends Application {
             currentStage.setMaximized(true);
         }
     }
-    //opens fileChooser and saves file
-    public static void openFileChooserExport( Boolean exportType) { //true means save as html
+    //opens fileChooser and exports file
+    public static void openFileChooserExport( Boolean exportType) { //true means save as html, false means PDF
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
 
@@ -91,12 +107,42 @@ public class TilesJavaFX extends Application {
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
-            }
-            else {                                                              //<------ add exporting PDF here
+            } else { //export PDF
+                try {
+                    String outputText = TilesMainWindow.renderedOut; //gets HTML to save
+                    OutputStream output = new FileOutputStream(file);
+                    Document document = new Document();
+                    PdfWriter writer = PdfWriter.getInstance(document, output);
+                    document.open();
+
+                    // CSS
+                    CSSResolver cssResolver = XMLWorkerHelper.getInstance().getDefaultCssResolver(true);
+
+                    // HTML
+                    HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
+                    htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
+                    htmlContext.setResourcesRootPath(TilesMainWindow.currentFilePath.getParent());
+
+                    // Pipelines
+                    PdfWriterPipeline pdf = new PdfWriterPipeline(document, writer);
+                    HtmlPipeline html = new HtmlPipeline(htmlContext, pdf);
+                    CssResolverPipeline css = new CssResolverPipeline(cssResolver, html);
+
+                    // XML Worker
+                    XMLWorker worker = new XMLWorker(css, true);
+                    XMLParser p = new XMLParser(worker);
+                    p.parse(new ByteArrayInputStream(outputText.getBytes()));
+
+                    document.close();
+                    output.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
-    //opens fileChooser and exports file
+
+    //opens fileChooser and saves file
     public static void openFileChooserSaveAs() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
