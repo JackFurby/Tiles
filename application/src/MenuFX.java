@@ -197,15 +197,15 @@ public class MenuFX {
         //saves a file that has previously been saved
         saveItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                if (TilesMainWindow.pathSet) { //if file has been previously saved
+                if (TilesMainWindow.getPathSet()) { //if file has been previously saved
                     try {
-                        PrintWriter output = new PrintWriter( TilesMainWindow.currentFilePath ); //sets name and location of file
+                        PrintWriter output = new PrintWriter( TilesMainWindow.getCurrentFilePath() ); //sets name and location of file
                         String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
                         for ( int i = 0; i < outputText.length; i++ ) {
                             output.println( outputText[i].toString() ); //saves lines of text
                         }
                         output.close();
-                        TilesMainWindow.fileChange = false; //resets fileChange
+                        TilesMainWindow.setFileChange(false); //resets fileChange
                     } catch ( Exception ex ) {
                         System.out.println( ex );
                     }
@@ -239,13 +239,13 @@ public class MenuFX {
         //exports current open item as PDF
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.openFileChooserExport(false); //false means save as pdf
+                TilesJavaFX.openFileChooserExport("PDF");
             }
         });
         //exports current open item as HTML
         htmlExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.openFileChooserExport(true); //true means save as html
+                TilesJavaFX.openFileChooserExport("HTML");
 
             }
         });

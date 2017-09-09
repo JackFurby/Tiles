@@ -14,21 +14,13 @@ import javafx.scene.control.SplitPane;
 import java.io.File;
 import java.util.List;
 
-
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
 public class TilesMainWindow{
 
-    //global variables
-    public static File currentFilePath;
-    public static Boolean pathSet;
-    public static Boolean fileChange;
-    public static File outputCssSheet;
-    public static String renderedOut;
-
-    //local variables
+    //variables
     private static Scene scene;
     private RowConstraints row1;
     private ColumnConstraints col1;
@@ -37,10 +29,15 @@ public class TilesMainWindow{
     private static TextArea inputArea;
     private static SplitPane inOutArea;
     private File defaultCssFile;
+    private static String renderedOut;
+    private static File outputCssSheet;
+    private static Boolean fileChange;
+    private static Boolean pathSet;
+    private static File currentFilePath;
 
     public TilesMainWindow() {
 
-        //set starting properties for global variables
+        //set starting values for variables
         fileChange = false;
         pathSet = false;
 
@@ -112,10 +109,55 @@ public class TilesMainWindow{
         });
     }
 
-    //returns the scene, used to add content to primaryStage
+    // returns the scene, used to add content to primaryStage
     public static Scene getScene() {
 		return scene;
 	}
+    // returns HTML string of current document
+    public static String getRenderedOut() {
+        return renderedOut;
+    }
+    // returns file for css sheet used for rendering document
+    public static File getOutputCssSheet() {
+        return outputCssSheet;
+    }
+    // returns whether the current document file has been change
+    public static Boolean getfileChange() {
+        return fileChange;
+    }
+    // Sets fileChange variable
+    public static void setFileChange(Boolean change) {
+        fileChange = change;
+    }
+    // returns whether the current document has a file path
+    public static Boolean getPathSet() {
+        return pathSet;
+    }
+    // Sets pathSet variable
+    public static void setPathSet(Boolean set) {
+        pathSet = set;
+    }
+    // returns the current document file path
+    public static File getCurrentFilePath() {
+        return currentFilePath;
+    }
+    // Sets current document file path
+    public static void setCurrentFilePath(File path) {
+        currentFilePath = path;
+    }
+    //returns an array of lines in inputArea
+    public static String[] getInputText() {
+        String[] lines = inputArea.getText().split("\\n");
+        return lines;
+    }
+    //sets text in inputarea (will replace whatever is currently there)
+    public static void setInputArea(  List<String> lines ) {
+        inputArea.clear();
+        for (int i=0; i < lines.size(); i++) {
+            inputArea.appendText(lines.get(i) + "\n");
+        }
+        setFileChange(false);
+    }
     public static void setSplitPaneDevider( double ratio ) {
         inOutArea.setDividerPositions( ratio );
     }
@@ -130,19 +172,6 @@ public class TilesMainWindow{
     }
     public static void clearInputArea() {
         inputArea.clear();
-        TilesMainWindow.fileChange = false;
-    }
-    //returns an array of lines in inputArea
-    public static String[] getInputText() {
-        String[] lines = inputArea.getText().split("\\n");
-        return lines;
-    }
-    //sets text in inputarea (will replace whatever is currently there)
-    public static void setInputArea(  List<String> lines ) {
-        inputArea.clear();
-        for (int i=0; i < lines.size(); i++) {
-            inputArea.appendText(lines.get(i) + "\n");
-        }
-        TilesMainWindow.fileChange = false;
+        setFileChange(false);
     }
 }

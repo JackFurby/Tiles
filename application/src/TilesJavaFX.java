@@ -69,7 +69,7 @@ public class TilesJavaFX extends Application {
         }
     }
     //opens fileChooser and exports file
-    public static void openFileChooserExport( Boolean exportType) { //true means save as html, false means PDF
+    public static void openFileChooserExport( String exportType) { //true means save as html, false means PDF
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
 
@@ -78,7 +78,7 @@ public class TilesJavaFX extends Application {
         FileChooser.ExtensionFilter htmlFileType = new FileChooser.ExtensionFilter("HTML files (*.html)", "*.html");
         FileChooser.ExtensionFilter txtFileType = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
         FileChooser.ExtensionFilter ownFileType = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
-        if (exportType) { //sets export type on fileChoser open
+        if (exportType == "HTML") { //sets export type on fileChoser open
             fileChooser.getExtensionFilters().addAll(htmlFileType, pdfFileType, txtFileType, ownFileType);
         } else {
             fileChooser.getExtensionFilters().addAll(pdfFileType, htmlFileType, txtFileType, ownFileType);
@@ -91,25 +91,25 @@ public class TilesJavaFX extends Application {
             if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") { //saving as HTML         <---look for a better way to do this
                 try {
                     PrintWriter output = new PrintWriter( file ); //sets name and location of file
-                    String outputText = TilesMainWindow.renderedOut; //gets HTML to save
+                    String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
                     output.println( outputText ); //saves HTML
                     Scanner in;
-                    in = new Scanner( TilesMainWindow.outputCssSheet );
+                    in = new Scanner( TilesMainWindow.getOutputCssSheet() );
                     output.println("<style>"); //start of style
                     while ( in.hasNextLine() ) {
                         output.println( in.nextLine().toString() ); //saves lines of text
                     }
                     output.println("</style>"); //end of style
-                    TilesMainWindow.fileChange = false; //resets fileChange
-                    TilesMainWindow.currentFilePath = file;
-                    TilesMainWindow.pathSet = true;
+                    TilesMainWindow.setFileChange(false); //resets fileChange
+                    TilesMainWindow.setCurrentFilePath(file);
+                    TilesMainWindow.setPathSet(true);
                     output.close();
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
             } else { //export PDF
                 try {
-                    String outputText = TilesMainWindow.renderedOut; //gets HTML to save
+                    String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
                     OutputStream output = new FileOutputStream(file);
                     Document document = new Document();
                     PdfWriter writer = PdfWriter.getInstance(document, output);
@@ -121,7 +121,10 @@ public class TilesJavaFX extends Application {
                     // HTML
                     HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
                     htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
-                    htmlContext.setResourcesRootPath(TilesMainWindow.currentFilePath.getParent());
+                    if (TilesMainWindow.getPathSet()) {
+                        htmlContext.setResourcesRootPath(TilesMainWindow.getCurrentFilePath().getParent());
+                    }
+
 
                     // Pipelines
                     PdfWriterPipeline pdf = new PdfWriterPipeline(document, writer);
@@ -165,9 +168,9 @@ public class TilesJavaFX extends Application {
                     output.println( outputText[i].toString() ); //saves lines of text
                 }
                 output.close();
-                TilesMainWindow.fileChange = false; //resets fileChange
-                TilesMainWindow.currentFilePath = file;
-                TilesMainWindow.pathSet = true;
+                TilesMainWindow.setFileChange(false); //resets fileChange
+                TilesMainWindow.setCurrentFilePath(file);
+                TilesMainWindow.setPathSet(true);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
@@ -196,9 +199,9 @@ public class TilesJavaFX extends Application {
                 while ( in.hasNextLine() ) {
                     lines.add(in.nextLine().toString());
                 }
-                TilesMainWindow.fileChange = false; //resets fileChange
-                TilesMainWindow.currentFilePath = file;
-                TilesMainWindow.pathSet = true;
+                TilesMainWindow.setFileChange(false); //resets fileChange
+                TilesMainWindow.setCurrentFilePath(file);
+                TilesMainWindow.setPathSet(true);
             } catch ( Exception error ) {
                 System.out.println( error );
             }
@@ -230,7 +233,7 @@ public class TilesJavaFX extends Application {
     //checks for changes to current document
     public static Boolean changeCheck() {
         Boolean checkOption;
-        if (TilesMainWindow.fileChange) { //if file has been previously saved
+        if (TilesMainWindow.getfileChange()) { //if file has been previously saved
             if (changeWarning()) {
                 checkOption = true;
             } else {
