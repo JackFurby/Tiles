@@ -151,6 +151,7 @@ public class MenuFX {
         viewMenu.getItems().add( hideEditPane );
 
         //ActionListener for menu items
+
         //cuts text from mainWindow
         cutItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -172,7 +173,7 @@ public class MenuFX {
         //clears application input area and displays save warning if unsaved changes are present
         newItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                if (TilesJavaFX.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
                     TilesMainWindow.clearInputArea();
                 }
             }
@@ -181,8 +182,8 @@ public class MenuFX {
         openItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 List<String> fileLines;
-                if (TilesJavaFX.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
-                    fileLines = TilesJavaFX.openFileChooserOpen();
+                if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                    fileLines = Save.openFileChooserOpen();
                     if (fileLines.isEmpty() == false) {
                         TilesMainWindow.setInputArea(fileLines);
                     }
@@ -210,20 +211,20 @@ public class MenuFX {
                         System.out.println( ex );
                     }
                 } else {
-                    TilesJavaFX.openFileChooserSaveAs();
+                    Save.openFileChooserSaveAs();
                 }
             }
         });
         //saves text in inputArea to a md file
         saveAsItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.openFileChooserSaveAs();
+                Save.openFileChooserSaveAs();
             }
         });
         //exits application
         exitItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                if (TilesJavaFX.changeCheck()) {
+                if (Save.changeCheck()) {
                     Platform.exit();
                 }
             }
@@ -239,13 +240,13 @@ public class MenuFX {
         //exports current open item as PDF
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.openFileChooserExport("PDF");
+                Save.openFileChooserExport("PDF");
             }
         });
         //exports current open item as HTML
         htmlExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.openFileChooserExport("HTML");
+                Save.openFileChooserExport("HTML");
 
             }
         });
