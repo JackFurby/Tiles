@@ -9,6 +9,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
+import java.nio.file.spi.FileTypeDetector;
+import java.nio.file.Files;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -29,8 +31,7 @@ public class Save {
 
     private static Stage stage;
 
-    //opens fileChooser and exports file
-    public static void openFileChooserExport( String exportType) { //true means save as html, false means PDF
+    public static void saveAndExport(String exportType) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
 
@@ -38,18 +39,27 @@ public class Save {
         FileChooser.ExtensionFilter pdfFileType = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
         FileChooser.ExtensionFilter htmlFileType = new FileChooser.ExtensionFilter("HTML files (*.html)", "*.html");
         FileChooser.ExtensionFilter txtFileType = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter mdFileType = new FileChooser.ExtensionFilter("Markdown files (*.md)", "*.md");
         FileChooser.ExtensionFilter ownFileType = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
-        if (exportType == "HTML") { //sets export type on fileChoser open
-            fileChooser.getExtensionFilters().addAll(htmlFileType, pdfFileType, txtFileType, ownFileType);
+
+        //sets file type to save / export as
+        if (exportType == "HTML") {
+            fileChooser.getExtensionFilters().addAll(htmlFileType, pdfFileType, mdFileType, txtFileType, ownFileType);
+        } else if (exportType == "PDF") {
+            fileChooser.getExtensionFilters().addAll(pdfFileType, htmlFileType, mdFileType, txtFileType, ownFileType);
+        } else if (exportType == "MD") {
+            fileChooser.getExtensionFilters().addAll(mdFileType, txtFileType, htmlFileType, pdfFileType, ownFileType);
         } else {
-            fileChooser.getExtensionFilters().addAll(pdfFileType, htmlFileType, txtFileType, ownFileType);
+            fileChooser.getExtensionFilters().addAll(txtFileType, mdFileType, htmlFileType, pdfFileType, ownFileType);
         }
+
         //displays save as window
         File file = fileChooser.showSaveDialog(stage);
 
         //saves file
         if (file != null) {
-            if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") { //saving as HTML         <---look for a better way to do this
+            //saving as HTML
+            if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") {         //<---look for a better way to do this
                 try {
                     PrintWriter output = new PrintWriter( file ); //sets name and location of file
                     String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
@@ -61,14 +71,12 @@ public class Save {
                         output.println( in.nextLine().toString() ); //saves lines of text
                     }
                     output.println("</style>"); //end of style
-                    TilesMainWindow.setFileChange(false); //resets fileChange
-                    TilesMainWindow.setCurrentFilePath(file);
-                    TilesMainWindow.setPathSet(true);
                     output.close();
                 } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
+                    TilesJavaFX.errorPopup("Error while saving. Error: " + ex.getMessage());
                 }
-            } else { //export PDF
+            //export as PDF
+        } else if (fileChooser.getSelectedExtensionFilter().getDescription() == "PDF files (*.pdf)") {
                 try {
                     String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
                     OutputStream output = new FileOutputStream(file);
@@ -100,42 +108,45 @@ public class Save {
                     document.close();
                     output.close();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    TilesJavaFX.errorPopup("Error while saving. Error: " + e);
+                }
+            } else {
+                try {
+                    PrintWriter output = new PrintWriter( file ); //sets name and location of file
+                    String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
+                    for ( int i = 0; i < outputText.length; i++ ) {
+                        output.println( outputText[i].toString() ); //saves lines of text
+                    }
+                    output.close();
+                    TilesMainWindow.setFileChange(false); //resets fileChange
+                    TilesMainWindow.setCurrentFilePath(file);
+                    TilesMainWindow.setPathSet(true);
+                } catch (Exception ex) {
+                    TilesJavaFX.errorPopup("Error while saving. Error: " + ex.getMessage());
                 }
             }
         }
     }
-    //opens fileChooser and saves file
-    public static void openFileChooserSaveAs() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save as");
 
-        //Set extension filter
-        FileChooser.ExtensionFilter mdFileType = new FileChooser.ExtensionFilter("Markdown files (*.md)", "*.md");
-        FileChooser.ExtensionFilter txtFileType = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
-        FileChooser.ExtensionFilter ownFileType = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
-        fileChooser.getExtensionFilters().addAll(mdFileType, txtFileType, ownFileType);
-
-        //displays save as window
-        File file = fileChooser.showSaveDialog(stage);
-
-        //saves file
-        if (file != null) {
+    //saves a document that has previously been saved
+    public static void saveCurrent() {
+        if (TilesMainWindow.getPathSet()) { //if file has been previously saved
             try {
-                PrintWriter output = new PrintWriter( file ); //sets name and location of file
+                PrintWriter output = new PrintWriter( TilesMainWindow.getCurrentFilePath() ); //sets name and location of file
                 String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
                 for ( int i = 0; i < outputText.length; i++ ) {
                     output.println( outputText[i].toString() ); //saves lines of text
                 }
                 output.close();
                 TilesMainWindow.setFileChange(false); //resets fileChange
-                TilesMainWindow.setCurrentFilePath(file);
-                TilesMainWindow.setPathSet(true);
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+            } catch ( Exception ex ) {
+                TilesJavaFX.errorPopup("Error while saving. Error: " + ex);
             }
+        } else {
+            saveAndExport("MD");
         }
     }
+
     //opens file menu to select a file to open in application
     public static List<String> openFileChooserOpen() {
         List<String> lines = new ArrayList<String>(); //list of lines in file to open
@@ -163,7 +174,7 @@ public class Save {
                 TilesMainWindow.setCurrentFilePath(file);
                 TilesMainWindow.setPathSet(true);
             } catch ( Exception error ) {
-                System.out.println( error );
+                TilesJavaFX.errorPopup("Error while opening file. Error: " + error);
             }
         }
         return lines;
@@ -181,14 +192,6 @@ public class Save {
         } else {
             return false;
         }
-    }
-    //displays error message with a given message
-    public static void errorPopup( String message ) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle( "Error" );
-        alert.setHeaderText("Somthing went wrong");
-        alert.setContentText("Look up" + message + "for more information");
-        alert.showAndWait();
     }
     //checks for changes to current document
     public static Boolean changeCheck() {

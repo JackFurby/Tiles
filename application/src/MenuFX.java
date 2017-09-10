@@ -198,27 +198,13 @@ public class MenuFX {
         //saves a file that has previously been saved
         saveItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                if (TilesMainWindow.getPathSet()) { //if file has been previously saved
-                    try {
-                        PrintWriter output = new PrintWriter( TilesMainWindow.getCurrentFilePath() ); //sets name and location of file
-                        String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
-                        for ( int i = 0; i < outputText.length; i++ ) {
-                            output.println( outputText[i].toString() ); //saves lines of text
-                        }
-                        output.close();
-                        TilesMainWindow.setFileChange(false); //resets fileChange
-                    } catch ( Exception ex ) {
-                        System.out.println( ex );
-                    }
-                } else {
-                    Save.openFileChooserSaveAs();
-                }
+                Save.saveCurrent();
             }
         });
         //saves text in inputArea to a md file
         saveAsItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.openFileChooserSaveAs();
+                Save.saveAndExport("MD");
             }
         });
         //exits application
@@ -240,13 +226,13 @@ public class MenuFX {
         //exports current open item as PDF
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.openFileChooserExport("PDF");
+                Save.saveAndExport("PDF");
             }
         });
         //exports current open item as HTML
         htmlExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.openFileChooserExport("HTML");
+                Save.saveAndExport("HTML");
 
             }
         });

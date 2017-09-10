@@ -25,7 +25,7 @@ public class ConfigFX {
         } catch ( FileNotFoundException fileNameError ) {
             newConfigFile();
         } catch ( Exception outError) {
-            Save.errorPopup( outError.toString() );
+            TilesJavaFX.errorPopup( outError.toString() );
         }
     }
     //makes new config file then calles loadConfigFile() to put settings in hashmap
@@ -34,7 +34,7 @@ public class ConfigFX {
             PrintWriter output = new PrintWriter( "config.txt" );
             output.close();
         } catch ( Exception outError ) {
-            Save.errorPopup( outError.toString() );
+            TilesJavaFX.errorPopup( outError.toString() );
         }
         loadConfigFile(); //loads new config file
     }
@@ -45,7 +45,7 @@ public class ConfigFX {
             PrintWriter output = new PrintWriter( "config.txt" );
             output.close();
         } catch ( Exception outError ) {
-            Save.errorPopup( outError.toString() );
+            TilesJavaFX.errorPopup( outError.toString() );
         }
     }
 }

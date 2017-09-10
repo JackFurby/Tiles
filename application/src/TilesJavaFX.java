@@ -2,6 +2,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class TilesJavaFX extends Application {
 
@@ -38,5 +40,13 @@ public class TilesJavaFX extends Application {
         } else {
             currentStage.setMaximized(true);
         }
+    }
+    //displays error message with a given message
+    public static void errorPopup( String message ) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle( "Error" );
+        alert.setHeaderText("Somthing went wrong");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
