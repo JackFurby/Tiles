@@ -13,17 +13,19 @@ import java.io.File;
 import java.util.List;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 public class MenuFX {
 
     private static final long serialVersionUID = 1L;
 
     private static MenuBar menuBar;
-    private static MenuItem printItm, newItm, openItm, openRecentItm, exitItm,
+    private static MenuItem printItm, newItm, openItm, exitItm,
         cutItm, copyItm, pasteItm, saveItm, saveAsItm, enterFullScreenItm, pdfExpItm,
         htmlExpItm, viewOneTwo, viewTwoOne, viewOneOne, hidePrevPane, hideEditPane,
         preferencesItm;
-    private static Menu editMenu, fileMenu, viewMenu, helpMenu, exportMenu;
+    private static Menu editMenu, fileMenu, viewMenu, helpMenu, exportMenu, openRecentItm;
 
 
     public void MenuFX() {
@@ -42,11 +44,11 @@ public class MenuFX {
         viewMenu = new Menu( "View" );
         helpMenu = new Menu( "Help" );
         exportMenu = new Menu( "Export" );
+        openRecentItm = new Menu("Recent documents");
 
         //items for elements
         newItm = new MenuItem();
         openItm = new MenuItem();
-        openRecentItm = new MenuItem();
         saveItm = new MenuItem();
         saveAsItm = new MenuItem();
         exitItm = new MenuItem();
@@ -89,7 +91,6 @@ public class MenuFX {
         saveAsItm.setText( "Save as" );
         saveAsItm.setMnemonicParsing( true );
         saveAsItm.setAccelerator( new KeyCodeCombination( KeyCode.S, KeyCombination.SHIFT_DOWN, KeyCombination.META_DOWN ) );
-        openRecentItm.setText( "Open Recent" );
         printItm.setText( "Print" );
         printItm.setMnemonicParsing( true );
         printItm.setAccelerator( new KeyCodeCombination( KeyCode.P, KeyCombination.META_DOWN ) );
@@ -190,11 +191,6 @@ public class MenuFX {
                 }
             }
         });
-        openRecentItm.setOnAction( new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                System.out.println( "openRecentItm" );
-            }
-        });
         //saves a file that has previously been saved
         saveItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -276,12 +272,51 @@ public class MenuFX {
                 System.out.println( "preferencesItm" );
             }
         });
+        // refreshes openRecentItm menu on click
+        fileMenu.showingProperty().addListener(new ChangeListener<Boolean>() {
+            @Override public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+                if (newValue.booleanValue()) {
+                        setOpenRecentItm();
+                }
+            }
+        });
 
         //adding elements to menu
         menuBar.getMenus().addAll(fileMenu, editMenu, viewMenu, helpMenu);
     }
+
     //returns menu
     public MenuBar getMenu() {
         return menuBar;
+    }
+
+    // refreshes menu items in openRecentItm
+    public static void setOpenRecentItm() {
+        openRecentItm.getItems().clear(); // clear menu items from openRecentItm (removes duplicates)
+        //makes a menu item for every entery in recentSaves
+        for (int i = 0; i < Save.getRecentSaves().size(); i++) {
+            String menuItmPath = Save.getRecentSave(i);
+            String menuItmText = menuItmPath;
+            MenuItem newDoc = new MenuItem();
+            if (menuItmPath.length() <= 35) {
+                menuItmText = menuItmPath;
+            } else if (menuItmPath.length() > 35) {
+                menuItmText = "..." + menuItmPath.substring(menuItmPath.length() - 35);
+            }
+            newDoc.setText(menuItmText);
+            openRecentItm.getItems().add(newDoc);
+
+            newDoc.setOnAction( new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    List<String> fileLines;
+                    if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                        fileLines = Save.openRecentSave(menuItmPath);
+                        if (fileLines.isEmpty() == false) {
+                            TilesMainWindow.setInputArea(fileLines);
+                        }
+                    }
+                }
+            });
+        }
     }
 }

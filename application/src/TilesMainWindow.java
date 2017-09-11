@@ -60,6 +60,7 @@ public class TilesMainWindow{
         MenuFX menu = new MenuFX();
         menu.MenuFX();
         MenuBar menuBar = menu.getMenu();
+        Save.setRecentSaves("recentSave.dat"); //set recentSave
 
         //create elements for application
         inputArea = new TextArea();

@@ -11,6 +11,11 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import java.nio.file.spi.FileTypeDetector;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
+import java.io.Serializable;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -27,9 +32,10 @@ import com.itextpdf.tool.xml.html.Tags;
 import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 
-public class Save {
+public class Save implements Serializable{
 
     private static Stage stage;
+    private static List<String> recentSaves = new ArrayList<String>();
 
     public static void saveAndExport(String exportType) {
         FileChooser fileChooser = new FileChooser();
@@ -59,16 +65,16 @@ public class Save {
         //saves file
         if (file != null) {
             //saving as HTML
-            if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") {         //<---look for a better way to do this
+            if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") {
                 try {
-                    PrintWriter output = new PrintWriter( file ); //sets name and location of file
+                    PrintWriter output = new PrintWriter(file); //sets name and location of file
                     String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
-                    output.println( outputText ); //saves HTML
+                    output.println(outputText); //saves HTML
                     Scanner in;
                     in = new Scanner( TilesMainWindow.getOutputCssSheet() );
                     output.println("<style>"); //start of style
-                    while ( in.hasNextLine() ) {
-                        output.println( in.nextLine().toString() ); //saves lines of text
+                    while (in.hasNextLine()) {
+                        output.println(in.nextLine().toString()); //saves lines of text
                     }
                     output.println("</style>"); //end of style
                     output.close();
@@ -94,7 +100,6 @@ public class Save {
                         htmlContext.setResourcesRootPath(TilesMainWindow.getCurrentFilePath().getParent());
                     }
 
-
                     // Pipelines
                     PdfWriterPipeline pdf = new PdfWriterPipeline(document, writer);
                     HtmlPipeline html = new HtmlPipeline(htmlContext, pdf);
@@ -112,15 +117,16 @@ public class Save {
                 }
             } else {
                 try {
-                    PrintWriter output = new PrintWriter( file ); //sets name and location of file
+                    PrintWriter output = new PrintWriter(file); //sets name and location of file
                     String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
-                    for ( int i = 0; i < outputText.length; i++ ) {
+                    for (int i = 0; i < outputText.length; i++) {
                         output.println( outputText[i].toString() ); //saves lines of text
                     }
                     output.close();
                     TilesMainWindow.setFileChange(false); //resets fileChange
                     TilesMainWindow.setCurrentFilePath(file);
                     TilesMainWindow.setPathSet(true);
+                    setRecentSave(file); // adds document to recentSaves
                 } catch (Exception ex) {
                     TilesJavaFX.errorPopup("Error while saving. Error: " + ex.getMessage());
                 }
@@ -132,14 +138,15 @@ public class Save {
     public static void saveCurrent() {
         if (TilesMainWindow.getPathSet()) { //if file has been previously saved
             try {
-                PrintWriter output = new PrintWriter( TilesMainWindow.getCurrentFilePath() ); //sets name and location of file
+                PrintWriter output = new PrintWriter(TilesMainWindow.getCurrentFilePath()); //sets name and location of file
                 String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
-                for ( int i = 0; i < outputText.length; i++ ) {
-                    output.println( outputText[i].toString() ); //saves lines of text
+                for (int i = 0; i < outputText.length; i++) {
+                    output.println(outputText[i].toString()); //saves lines of text
                 }
                 output.close();
                 TilesMainWindow.setFileChange(false); //resets fileChange
-            } catch ( Exception ex ) {
+                setRecentSave(TilesMainWindow.getCurrentFilePath()); // adds document to recentSaves
+            } catch (Exception ex) {
                 TilesJavaFX.errorPopup("Error while saving. Error: " + ex);
             }
         } else {
@@ -149,7 +156,6 @@ public class Save {
 
     //opens file menu to select a file to open in application
     public static List<String> openFileChooserOpen() {
-        List<String> lines = new ArrayList<String>(); //list of lines in file to open
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open");
 
@@ -162,23 +168,82 @@ public class Save {
         //displays open window
         File file = fileChooser.showOpenDialog(stage);
 
+        return fileReader(file);
+    }
+
+    // reads txt / md file and returns lines of text
+    public static List<String> fileReader(File inputFile) {
+        List<String> lines = new ArrayList<String>(); //list of lines in file to open
         //opens selected file
-        if (file != null) {
+        if (inputFile != null) {
             Scanner in;
             try {
-                in = new Scanner( file );
+                in = new Scanner(inputFile);
                 while ( in.hasNextLine() ) {
                     lines.add(in.nextLine().toString());
                 }
                 TilesMainWindow.setFileChange(false); //resets fileChange
-                TilesMainWindow.setCurrentFilePath(file);
+                TilesMainWindow.setCurrentFilePath(inputFile);
                 TilesMainWindow.setPathSet(true);
-            } catch ( Exception error ) {
+                setRecentSave(inputFile); // adds document to recentSaves
+            } catch (Exception error) {
                 TilesJavaFX.errorPopup("Error while opening file. Error: " + error);
             }
         }
         return lines;
     }
+
+    // returns list recentSaves (list limited to 10 enteries)
+    public static List<String> getRecentSaves() {
+        return recentSaves;
+    }
+
+    // returns the file path as a string of a document in recentSaves
+    public static String getRecentSave(int index) {
+        return recentSaves.get(index);
+    }
+
+    // opens a recent save
+    public static List<String> openRecentSave(String filePath) {
+        File file = new File(filePath);
+        return fileReader(file);
+    }
+
+    // sets a new item to recentSaves
+    public static void setRecentSave(File save) {
+        // if save already in list remove old entery and add it into the first slot
+        if (recentSaves.contains(save.toString())) {
+            recentSaves.remove(save.toString());
+            recentSaves.add(0, save.toString());
+        } else {
+            recentSaves.add(0, save.toString());
+        }
+        if (recentSaves.size() > 10) {
+            recentSaves.remove(-1);
+        }
+        //saves recentSave to file
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("recentSave.dat"));
+            out.writeObject(recentSaves);
+            out.close();
+        }
+        catch (Exception e) {
+            TilesJavaFX.errorPopup("Error updating recent document:" + e);
+        }
+    }
+
+    //set recentSave from file
+    public static void setRecentSaves(String fileName) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream( fileName ));
+            recentSaves = (List<String>)in.readObject();
+            in.close();
+        }
+        catch (Exception e) {
+            TilesJavaFX.errorPopup("Error updating recent document:" + e);
+        }
+    }
+
     //displays warning window alerting about unsaved changes
     public static Boolean changeWarning() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -193,6 +258,7 @@ public class Save {
             return false;
         }
     }
+
     //checks for changes to current document
     public static Boolean changeCheck() {
         Boolean checkOption;

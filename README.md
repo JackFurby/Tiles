@@ -18,7 +18,5 @@ Currently there is a interface and input is converted to html before being rende
 * Config (WIP)
 * Syntax highlighting (JavaFX code area?)
 * Spell check (JavaFX code area?)
-* Fix toggle maximise button
 * File menu
-    * Open recent
     * Print
