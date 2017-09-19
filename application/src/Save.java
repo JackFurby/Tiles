@@ -37,6 +37,10 @@ public class Save implements Serializable{
     private static Stage stage;
     private static List<String> recentSaves = new ArrayList<String>();
 
+    public Save(String file) {
+        setRecentSaves(file);
+    }
+
     public static void saveAndExport(String exportType) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
@@ -68,10 +72,10 @@ public class Save implements Serializable{
             if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") {
                 try {
                     PrintWriter output = new PrintWriter(file); //sets name and location of file
-                    String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
+                    String outputText = TilesScene.getRenderedOut(); //gets HTML to save
                     output.println(outputText); //saves HTML
                     Scanner in;
-                    in = new Scanner( TilesMainWindow.getOutputCssSheet() );
+                    in = new Scanner( TilesScene.getOutputCssSheet() );
                     output.println("<style>"); //start of style
                     while (in.hasNextLine()) {
                         output.println(in.nextLine().toString()); //saves lines of text
@@ -84,7 +88,7 @@ public class Save implements Serializable{
             //export as PDF
         } else if (fileChooser.getSelectedExtensionFilter().getDescription() == "PDF files (*.pdf)") {
                 try {
-                    String outputText = TilesMainWindow.getRenderedOut(); //gets HTML to save
+                    String outputText = TilesScene.getRenderedOut(); //gets HTML to save
                     OutputStream output = new FileOutputStream(file);
                     Document document = new Document();
                     PdfWriter writer = PdfWriter.getInstance(document, output);
@@ -96,8 +100,8 @@ public class Save implements Serializable{
                     // HTML
                     HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
                     htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
-                    if (TilesMainWindow.getPathSet()) {
-                        htmlContext.setResourcesRootPath(TilesMainWindow.getCurrentFilePath().getParent());
+                    if (TilesScene.getPathSet()) {
+                        htmlContext.setResourcesRootPath(TilesScene.getCurrentFilePath().getParent());
                     }
 
                     // Pipelines
@@ -118,14 +122,14 @@ public class Save implements Serializable{
             } else {
                 try {
                     PrintWriter output = new PrintWriter(file); //sets name and location of file
-                    String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
+                    String[] outputText = TilesScene.getInputText(); //gets lines of text to save
                     for (int i = 0; i < outputText.length; i++) {
                         output.println( outputText[i].toString() ); //saves lines of text
                     }
                     output.close();
-                    TilesMainWindow.setFileChange(false); //resets fileChange
-                    TilesMainWindow.setCurrentFilePath(file);
-                    TilesMainWindow.setPathSet(true);
+                    TilesScene.setFileChange(false); //resets fileChange
+                    TilesScene.setCurrentFilePath(file);
+                    TilesScene.setPathSet(true);
                     setRecentSave(file); // adds document to recentSaves
                 } catch (Exception ex) {
                     TilesJavaFX.errorPopup("Error while saving. Error: " + ex.getMessage());
@@ -136,16 +140,16 @@ public class Save implements Serializable{
 
     //saves a document that has previously been saved
     public static void saveCurrent() {
-        if (TilesMainWindow.getPathSet()) { //if file has been previously saved
+        if (TilesScene.getPathSet()) { //if file has been previously saved
             try {
-                PrintWriter output = new PrintWriter(TilesMainWindow.getCurrentFilePath()); //sets name and location of file
-                String[] outputText = TilesMainWindow.getInputText(); //gets lines of text to save
+                PrintWriter output = new PrintWriter(TilesScene.getCurrentFilePath()); //sets name and location of file
+                String[] outputText = TilesScene.getInputText(); //gets lines of text to save
                 for (int i = 0; i < outputText.length; i++) {
                     output.println(outputText[i].toString()); //saves lines of text
                 }
                 output.close();
-                TilesMainWindow.setFileChange(false); //resets fileChange
-                setRecentSave(TilesMainWindow.getCurrentFilePath()); // adds document to recentSaves
+                TilesScene.setFileChange(false); //resets fileChange
+                setRecentSave(TilesScene.getCurrentFilePath()); // adds document to recentSaves
             } catch (Exception ex) {
                 TilesJavaFX.errorPopup("Error while saving. Error: " + ex);
             }
@@ -182,9 +186,9 @@ public class Save implements Serializable{
                 while ( in.hasNextLine() ) {
                     lines.add(in.nextLine().toString());
                 }
-                TilesMainWindow.setFileChange(false); //resets fileChange
-                TilesMainWindow.setCurrentFilePath(inputFile);
-                TilesMainWindow.setPathSet(true);
+                TilesScene.setFileChange(false); //resets fileChange
+                TilesScene.setCurrentFilePath(inputFile);
+                TilesScene.setPathSet(true);
                 setRecentSave(inputFile); // adds document to recentSaves
             } catch (Exception error) {
                 TilesJavaFX.errorPopup("Error while opening file. Error: " + error);
@@ -233,6 +237,7 @@ public class Save implements Serializable{
     }
 
     //set recentSave from file
+    @SuppressWarnings ("unchecked")
     public static void setRecentSaves(String fileName) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream( fileName ));
@@ -262,7 +267,7 @@ public class Save implements Serializable{
     //checks for changes to current document
     public static Boolean changeCheck() {
         Boolean checkOption;
-        if (TilesMainWindow.getfileChange()) { //if file has been previously saved
+        if (TilesScene.getfileChange()) { //if file has been previously saved
             if (changeWarning()) {
                 checkOption = true;
             } else {

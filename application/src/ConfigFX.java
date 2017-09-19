@@ -4,10 +4,12 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
+import javafx.stage.Stage;
 
 public class ConfigFX {
 
     private static Map<String, String> configItems = new HashMap<String, String>();
+    private static ConfigMenu configMenu = new ConfigMenu();
 
     //loads config file on call
     public ConfigFX() {
@@ -56,4 +58,13 @@ public class ConfigFX {
     public static String getConfigItem(String configKey) {
         return configItems.get(configKey);
     }
+
+    //creats preferences window
+    public static void preferencesWindow() {
+        Stage prefStage = new Stage();
+        prefStage.setTitle("Tiles preferences");
+        prefStage.setScene(configMenu.getScene());
+        prefStage.show();
+    }
+
 }

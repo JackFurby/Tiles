@@ -30,6 +30,8 @@ public class MenuFX {
 
     public void MenuFX() {
 
+        //Save options
+        Save save = new Save("recentSave.dat");
 
         //adds menu to menu bar on macOS
         System.setProperty( "apple.laf.useScreenMenuBar", "true" );
@@ -156,26 +158,26 @@ public class MenuFX {
         //cuts text from mainWindow
         cutItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.MainWinCut();
+                TilesScene.MainWinCut();
             }
         });
         //copys text from mainWindow
         copyItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.MainWinCopy();
+                TilesScene.MainWinCopy();
             }
         });
         //pastes text to mainWindow
         pasteItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.MainWinPaste();
+                TilesScene.MainWinPaste();
             }
         });
         //clears application input area and displays save warning if unsaved changes are present
         newItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
-                    TilesMainWindow.clearInputArea();
+                if (save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                    TilesScene.clearInputArea();
                 }
             }
         });
@@ -183,10 +185,10 @@ public class MenuFX {
         openItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 List<String> fileLines;
-                if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
-                    fileLines = Save.openFileChooserOpen();
+                if (save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                    fileLines = save.openFileChooserOpen();
                     if (fileLines.isEmpty() == false) {
-                        TilesMainWindow.setInputArea(fileLines);
+                        TilesScene.setInputArea(fileLines);
                     }
                 }
             }
@@ -194,19 +196,19 @@ public class MenuFX {
         //saves a file that has previously been saved
         saveItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.saveCurrent();
+                save.saveCurrent();
             }
         });
         //saves text in inputArea to a md file
         saveAsItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.saveAndExport("MD");
+                save.saveAndExport("MD");
             }
         });
         //exits application
         exitItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                if (Save.changeCheck()) {
+                if (save.changeCheck()) {
                     Platform.exit();
                 }
             }
@@ -214,52 +216,51 @@ public class MenuFX {
         //toggles application between fullscreen and windowed mode
         enterFullScreenItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Window theStage = TilesMainWindow.getScene().getWindow();
+                Window theStage = TilesScene.getScene().getWindow();
                 TilesJavaFX.toggleMaximize((Stage)theStage);
-                System.out.println((Stage)theStage);
             }
         });
         //exports current open item as PDF
         pdfExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.saveAndExport("PDF");
+                save.saveAndExport("PDF");
             }
         });
         //exports current open item as HTML
         htmlExpItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Save.saveAndExport("HTML");
+                save.saveAndExport("HTML");
 
             }
         });
         //sets SplitPaneRatio to 1 to 2
         viewOneTwo.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.setSplitPaneDevider( 1.0/3.0 );
+                TilesScene.setSplitPaneDevider( 1.0/3.0 );
             }
         });
         //sets SplitPaneRatio to 2 to 1
         viewTwoOne.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.setSplitPaneDevider( 1.0/3.0 * 2 );
+                TilesScene.setSplitPaneDevider( 1.0/3.0 * 2 );
             }
         });
         //sets SplitPaneRatio to 1 to 1
         viewOneOne.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.setSplitPaneDevider( 0.5 );
+                TilesScene.setSplitPaneDevider( 0.5 );
             }
         });
         //sets SplitPaneRatio to 1 to 0
         hidePrevPane.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.setSplitPaneDevider( 1 );
+                TilesScene.setSplitPaneDevider( 1 );
             }
         });
         //sets SplitPaneRatio to 0 to 1
         hideEditPane.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesMainWindow.setSplitPaneDevider( 0 );
+                TilesScene.setSplitPaneDevider( 0 );
             }
         });
         printItm.setOnAction( new EventHandler<ActionEvent>() {
@@ -269,7 +270,7 @@ public class MenuFX {
         });
         preferencesItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "preferencesItm" );
+                TilesJavaFX.openPreferiences();
             }
         });
         // refreshes openRecentItm menu on click
@@ -312,7 +313,7 @@ public class MenuFX {
                     if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
                         fileLines = Save.openRecentSave(menuItmPath);
                         if (fileLines.isEmpty() == false) {
-                            TilesMainWindow.setInputArea(fileLines);
+                            TilesScene.setInputArea(fileLines);
                         }
                     }
                 }

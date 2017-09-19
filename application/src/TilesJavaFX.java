@@ -7,15 +7,15 @@ import javafx.scene.control.Alert.AlertType;
 
 public class TilesJavaFX extends Application {
 
-    private TilesMainWindow mainWindow;
+    private TilesScene mainScene;
     private static ConfigFX config = new ConfigFX();
 
     @Override
-    public void start( Stage primaryStage ) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
 
-        mainWindow = new TilesMainWindow();
-        primaryStage.setTitle( "Tiles (Markdown)" );
-        primaryStage.setScene( mainWindow.getScene() );
+        mainScene = new TilesScene();
+        primaryStage.setTitle("Tiles");
+        primaryStage.setScene(mainScene.getScene());
         primaryStage.show();
 
         //on application exit
@@ -29,24 +29,32 @@ public class TilesJavaFX extends Application {
             }
         });
     }
+
     //launches application
-    public static void main( String[] args ) {
-        launch( args );
+    public static void main(String[] args) {
+        launch(args);
     }
+
     //toggles application maximized
-    public static void toggleMaximize( Stage currentStage ) {
+    public static void toggleMaximize(Stage currentStage) {
         if (currentStage.isMaximized()) {
             currentStage.setMaximized(false);
         } else {
             currentStage.setMaximized(true);
         }
     }
+
     //displays error message with a given message
-    public static void errorPopup( String message ) {
+    public static void errorPopup(String message) {
         Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle( "Error" );
+        alert.setTitle("Error");
         alert.setHeaderText("Somthing went wrong");
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    //opens config window
+    public static void openPreferiences() {
+        config.preferencesWindow();
     }
 }

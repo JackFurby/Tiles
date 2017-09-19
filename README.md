@@ -14,9 +14,9 @@ Currently there is a interface and input is converted to html before being rende
 * Help menu
 * CSS for application (add as application is developed)
 * CSS for output (WIP)
-* Preferences / settings
+* Preferences / settings (WIP)
 * Config (WIP)
-* Syntax highlighting (JavaFX code area?)
-* Spell check (JavaFX code area?)
-* File menu
-    * Print
+* Syntax highlighting (will do after V1)
+* Spell check (will do after V1)
+* File menu 
+    * Print (will do after V1)

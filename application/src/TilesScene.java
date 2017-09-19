@@ -18,7 +18,7 @@ import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
-public class TilesMainWindow{
+public class TilesScene{
 
     //variables
     private static Scene scene;
@@ -35,7 +35,7 @@ public class TilesMainWindow{
     private static Boolean pathSet;
     private static File currentFilePath;
 
-    public TilesMainWindow() {
+    public TilesScene() {
 
         //set starting values for variables
         fileChange = false;
@@ -56,11 +56,10 @@ public class TilesMainWindow{
         mainPanel.getRowConstraints().addAll( row1 );
         mainPanel.getColumnConstraints().addAll( col1 );
 
-        // menu for window
+        // menu for scene
         MenuFX menu = new MenuFX();
         menu.MenuFX();
         MenuBar menuBar = menu.getMenu();
-        Save.setRecentSaves("recentSave.dat"); //set recentSave
 
         //create elements for application
         inputArea = new TextArea();
@@ -76,7 +75,7 @@ public class TilesMainWindow{
         backPanel = new BorderPane();
         backPanel.setCenter(mainPanel);
         backPanel.setTop(menuBar);
-        backPanel.setPrefSize( 640, 480 ); //set size of panel
+        backPanel.setPrefSize( 1280, 720 ); //set size of panel
         scene = new Scene(backPanel);
 
         //setting ID's to elements
