@@ -20,10 +20,14 @@ import java.io.Serializable;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.itextpdf.tool.xml.pipeline.css.CSSResolver;
+import com.itextpdf.tool.xml.css.StyleAttrCSSResolver;
+import com.itextpdf.tool.xml.css.CssFile;
+import com.itextpdf.tool.xml.Pipeline;
 import com.itextpdf.tool.xml.parser.XMLParser;
 import com.itextpdf.tool.xml.XMLWorker;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
@@ -95,7 +99,10 @@ public class Save implements Serializable{
                     document.open();
 
                     // CSS
-                    CSSResolver cssResolver = XMLWorkerHelper.getInstance().getDefaultCssResolver(true);
+                    CSSResolver cssResolver = new StyleAttrCSSResolver();
+                    InputStream csspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(TilesScene.getCssPath().toString());
+                    CssFile cssfile = XMLWorkerHelper.getCSS(csspath);
+                    cssResolver.addCss(cssfile);
 
                     // HTML
                     HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
@@ -105,9 +112,7 @@ public class Save implements Serializable{
                     }
 
                     // Pipelines
-                    PdfWriterPipeline pdf = new PdfWriterPipeline(document, writer);
-                    HtmlPipeline html = new HtmlPipeline(htmlContext, pdf);
-                    CssResolverPipeline css = new CssResolverPipeline(cssResolver, html);
+                    Pipeline<?> css = new CssResolverPipeline(cssResolver, new HtmlPipeline(htmlContext, new PdfWriterPipeline(document, writer)));
 
                     // XML Worker
                     XMLWorker worker = new XMLWorker(css, true);

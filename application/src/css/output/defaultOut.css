@@ -83,3 +83,16 @@ img {
     margin: auto;
     width:90%;
 }
+table {
+    margin: 15px;
+    border-collapse: collapse;
+}
+table, th, tr, td {
+    border: 1px solid #ddd;
+}
+tr, th, td {
+    padding: 15px;
+}
+tr:nth-child(even) {
+    background: rgba(211,211,211, 0.5);
+}

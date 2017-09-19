@@ -13,10 +13,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.control.SplitPane;
 import java.io.File;
 import java.util.List;
+import java.util.Arrays;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.ext.gfm.tables.TablesExtension;
+import org.commonmark.Extension;
 
 public class TilesScene{
 
@@ -34,6 +37,7 @@ public class TilesScene{
     private static Boolean fileChange;
     private static Boolean pathSet;
     private static File currentFilePath;
+    private static File defaultCssFilePath;
 
     public TilesScene() {
 
@@ -44,6 +48,7 @@ public class TilesScene{
         //web elements (used to render html)
         final WebView outputArea = new WebView();
         final WebEngine webEngine = outputArea.getEngine();
+        List<Extension> extensions = Arrays.asList(TablesExtension.create()); //extentions for commonmark-java
 
         //create main elements for application
         mainPanel = new GridPane();
@@ -85,27 +90,29 @@ public class TilesScene{
 
         //css for application
         scene.getStylesheets().add("css/application/appMain.css"); //application interface
-        String defaultCssFilePath = "css/output/defaultOut.css";
-        webEngine.setUserStyleSheetLocation(getClass().getResource(defaultCssFilePath).toString()); //outputArea
+        String defaultCssPath = "css/output/defaultOut.css";
+        defaultCssFilePath = new File(defaultCssPath);
+
+        webEngine.setUserStyleSheetLocation(getClass().getResource(defaultCssPath).toString()); //outputArea
 
         try {
-            outputCssSheet = new File(defaultCssFilePath);
+            outputCssSheet = new File(defaultCssPath);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
 
 
         //listener for changes to inputArea
-        inputArea.textProperty().addListener( ( observable, oldValue, newValue ) -> {
-            Parser parser = Parser.builder().build(); //parser for converting md to html
-            HtmlRenderer renderer = HtmlRenderer.builder().build();
-            Node document = parser.parse( newValue ); //gets text from inputArea
+        inputArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            Parser parser = Parser.builder().extensions(extensions).build(); //parser for converting md to html
+            HtmlRenderer renderer = HtmlRenderer.builder().extensions(extensions).build();
+            Node document = parser.parse(newValue); //gets text from inputArea
             //converts md to html and set text in outputArea to converted text (rendered html), base tag is used for images in local directory
-            renderedOut = renderer.render( document );
+            renderedOut = renderer.render(document);
             webEngine.loadContent("<html><head><base href=\'file:///" + currentFilePath + "\'/></head><body>" + renderedOut + "</body></html>");
             fileChange = true; //lets application know a change has been made
 
-            //System.out.println(renderer.render( document )); //used for development
+            System.out.println(renderer.render( document )); //used for development
         });
     }
 
@@ -136,6 +143,10 @@ public class TilesScene{
     // Sets pathSet variable
     public static void setPathSet(Boolean set) {
         pathSet = set;
+    }
+    //gets css file path for output document
+    public static File getCssPath() {
+        return defaultCssFilePath;
     }
     // returns the current document file path
     public static File getCurrentFilePath() {

@@ -10,7 +10,6 @@ For exporting to PDF I used iText. More information can be found here: https://d
 Currently there is a interface and input is converted to html before being rendered. A few buttons in the menu work.
 
 ### To do
-* Improve cut, copy and paste
 * Help menu
 * CSS for application (add as application is developed)
 * CSS for output (WIP)
@@ -18,5 +17,9 @@ Currently there is a interface and input is converted to html before being rende
 * Config (WIP)
 * Syntax highlighting (will do after V1)
 * Spell check (will do after V1)
-* File menu 
+* File menu
     * Print (will do after V1)
+
+### Known issues
+* MD images cannot be rendered to PDF as document is in HTML and renderer takes XML
+* Tables do not respond to all CSS in outputArea
