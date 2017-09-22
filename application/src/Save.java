@@ -197,6 +197,9 @@ public class Save implements Serializable{
                 setRecentSave(inputFile); // adds document to recentSaves
             } catch (Exception error) {
                 TilesJavaFX.errorPopup("Error while opening file. Error: " + error);
+                if (recentSaves.contains(inputFile.toString())) { //removed file from recent saves (file no longer exists)
+                    recentSaves.remove(inputFile.toString());
+                }
             }
         }
         return lines;
