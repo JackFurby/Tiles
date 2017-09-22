@@ -7,7 +7,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.web.WebViewBuilder;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.SplitPane;
