@@ -36,18 +36,18 @@ public class TilesScene{
     private static Boolean fileChange;
     private static Boolean pathSet;
     private static File currentFilePath;
-    private static File defaultCssFilePath;
+    private static File selectedCssFilePath;
+
+    //web elements (used to render html)
+    private final WebView outputArea = new WebView();
+    private WebEngine webEngine = outputArea.getEngine();
+    private List<Extension> extensions = Arrays.asList(TablesExtension.create()); //extentions for commonmark-java
 
     public TilesScene() {
 
         //set starting values for variables
         fileChange = false;
         pathSet = false;
-
-        //web elements (used to render html)
-        final WebView outputArea = new WebView();
-        final WebEngine webEngine = outputArea.getEngine();
-        List<Extension> extensions = Arrays.asList(TablesExtension.create()); //extentions for commonmark-java
 
         //create main elements for application
         mainPanel = new GridPane();
@@ -90,15 +90,7 @@ public class TilesScene{
         //css for application
         scene.getStylesheets().add("css/application/appMain.css"); //application interface
         String defaultCssPath = "css/output/defaultOut.css";
-        defaultCssFilePath = new File(defaultCssPath);
-
-        webEngine.setUserStyleSheetLocation(getClass().getResource(defaultCssPath).toString()); //outputArea
-
-        try {
-            outputCssSheet = new File(defaultCssPath);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
+        setCssPath(defaultCssPath);
 
 
         //listener for changes to inputArea
@@ -145,7 +137,19 @@ public class TilesScene{
     }
     //gets css file path for output document
     public static File getCssPath() {
-        return defaultCssFilePath;
+        return selectedCssFilePath;
+    }
+    //sets a css sheet for the output document
+    public void setCssPath(String filePath) {
+        selectedCssFilePath = new File(filePath);
+
+        webEngine.setUserStyleSheetLocation(getClass().getResource(filePath).toString()); //outputArea
+
+        try {
+            outputCssSheet = new File(filePath);
+        } catch (Exception ex) {
+            TilesJavaFX.errorPopup("Error while setting CSS sheet. Error: " + ex.getMessage());
+        }
     }
     // returns the current document file path
     public static File getCurrentFilePath() {

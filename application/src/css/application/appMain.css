@@ -4,13 +4,13 @@
 }
 #inputArea {
     -fx-font-size: 11pt;
-    -fx-background-color: #0d0d0d;
+    -fx-background-color: #212121;
     -fx-background-radius:0;
     -fx-text-fill: #ffffff;
     -fx-min-width: 0;
 }
 #inputArea .content {
-    -fx-background-color: #0d0d0d;
+    -fx-background-color: #212121;
     -fx-background-radius:0;
 }
 #menuBar {
