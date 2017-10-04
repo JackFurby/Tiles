@@ -17,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.Serializable;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayInputStream;
@@ -251,6 +252,9 @@ public class Save implements Serializable{
             ObjectInputStream in = new ObjectInputStream(new FileInputStream( fileName ));
             recentSaves = (List<String>)in.readObject();
             in.close();
+        }
+        catch (FileNotFoundException noFileError) {
+            return;
         }
         catch (Exception e) {
             TilesJavaFX.errorPopup("Error updating recent document:" + e);
