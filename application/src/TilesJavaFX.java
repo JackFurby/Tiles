@@ -1,60 +1,23 @@
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.WindowEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public class TilesJavaFX extends Application {
 
-    private TilesScene mainScene;
-    private static ConfigFX config = new ConfigFX();
-
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
-        mainScene = new TilesScene();
-        primaryStage.setTitle("Tiles");
+        TilesScene mainScene = new TilesScene();
+        primaryStage.setTitle("Hello World!");
         primaryStage.setScene(mainScene.getScene());
         primaryStage.show();
 
-        //on application exit
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                event.consume();
-                if ( Save.changeCheck() ) {
-                    primaryStage.close(); //only close current stage incase multiple stages are open
-                }
-            }
-        });
     }
-
-    //launches application
-    public static void main(String[] args) {
+ public static void main(String[] args) {
         launch(args);
-    }
-
-    //toggles application maximized
-    public static void toggleMaximize(Stage currentStage) {
-        if (currentStage.isMaximized()) {
-            currentStage.setMaximized(false);
-        } else {
-            currentStage.setMaximized(true);
-        }
-    }
-
-    //displays error message with a given message
-    public static void errorPopup(String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Somthing went wrong");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    //opens config window
-    public static void openPreferiences() {
-        config.preferencesWindow();
     }
 }

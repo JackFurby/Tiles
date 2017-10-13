@@ -10,7 +10,7 @@ import javafx.scene.control.TextArea;
 public class ConfigMenu{
 
     //variables
-    private static Scene scene;
+    private Scene scene;
     private BorderPane settingsPanel;
     private TabPane tabContainer;
     private Tab editor, output;
@@ -80,7 +80,7 @@ public class ConfigMenu{
     }
 
     // returns the scene, used to add content to primaryStage
-    public static Scene getScene() {
+    public Scene getScene() {
 		return scene;
 	}
 }

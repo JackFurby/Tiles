@@ -17,6 +17,9 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.Serializable;
 
+import javafx.scene.Scene;
+import javafx.stage.Window;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -37,16 +40,21 @@ import com.itextpdf.tool.xml.html.Tags;
 import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 
-public class Save implements Serializable{
+public class Save {
 
-    private static Stage stage;
-    private static List<String> recentSaves = new ArrayList<String>();
+    private Stage stage;
+    private List<String> recentSaves = new ArrayList<String>();
+    private TilesScene saveScene;
+    private Boolean fileChange;
+    private Boolean pathSet;
+    private File currentFilePath;
 
-    public Save(String file) {
+    public Save(TilesScene currentScene, String file) {
+        saveScene = currentScene;
         setRecentSaves(file);
     }
 
-    public static void saveAndExport(String exportType) {
+    public void saveAndExport(String exportType) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
 
@@ -77,10 +85,10 @@ public class Save implements Serializable{
             if (fileChooser.getSelectedExtensionFilter().getDescription() == "HTML files (*.html)") {
                 try {
                     PrintWriter output = new PrintWriter(file); //sets name and location of file
-                    String outputText = TilesScene.getRenderedOut(); //gets HTML to save
+                    String outputText = saveScene.getRenderedOut(); //gets HTML to save
                     output.println(outputText); //saves HTML
                     Scanner in;
-                    in = new Scanner( TilesScene.getOutputCssSheet() );
+                    in = new Scanner(saveScene.getOutputCssSheet());
                     output.println("<style>"); //start of style
                     while (in.hasNextLine()) {
                         output.println(in.nextLine().toString()); //saves lines of text
@@ -88,12 +96,12 @@ public class Save implements Serializable{
                     output.println("</style>"); //end of style
                     output.close();
                 } catch (Exception ex) {
-                    TilesJavaFX.errorPopup("Error while saving. Error: " + ex.getMessage());
+                    saveScene.errorPopup("Error while saving. Error: " + ex.getMessage());
                 }
             //export as PDF
         } else if (fileChooser.getSelectedExtensionFilter().getDescription() == "PDF files (*.pdf)") {
                 try {
-                    String outputText = TilesScene.getRenderedOut(); //gets HTML to save
+                    String outputText = saveScene.getRenderedOut(); //gets HTML to save
                     OutputStream output = new FileOutputStream(file);
                     Document document = new Document();
                     PdfWriter writer = PdfWriter.getInstance(document, output);
@@ -101,15 +109,15 @@ public class Save implements Serializable{
 
                     // CSS
                     CSSResolver cssResolver = new StyleAttrCSSResolver();
-                    InputStream csspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(TilesScene.getCssPath().toString());
+                    InputStream csspath = Thread.currentThread().getContextClassLoader().getResourceAsStream(saveScene.getCssPath().toString());
                     CssFile cssfile = XMLWorkerHelper.getCSS(csspath);
                     cssResolver.addCss(cssfile);
 
                     // HTML
                     HtmlPipelineContext htmlContext = new HtmlPipelineContext(null);
                     htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
-                    if (TilesScene.getPathSet()) {
-                        htmlContext.setResourcesRootPath(TilesScene.getCurrentFilePath().getParent());
+                    if (getPathSet()) {
+                        htmlContext.setResourcesRootPath(getCurrentFilePath().getParent());
                     }
 
                     // Pipelines
@@ -123,41 +131,41 @@ public class Save implements Serializable{
                     document.close();
                     output.close();
                 } catch (Exception e) {
-                    TilesJavaFX.errorPopup("Error while saving. Error: " + e);
+                    saveScene.errorPopup("Error while saving. Error: " + e);
                 }
             } else {
                 try {
                     PrintWriter output = new PrintWriter(file); //sets name and location of file
-                    String[] outputText = TilesScene.getInputText(); //gets lines of text to save
+                    String[] outputText = saveScene.getInputText(); //gets lines of text to save
                     for (int i = 0; i < outputText.length; i++) {
                         output.println( outputText[i].toString() ); //saves lines of text
                     }
                     output.close();
-                    TilesScene.setFileChange(false); //resets fileChange
-                    TilesScene.setCurrentFilePath(file);
-                    TilesScene.setPathSet(true);
+                    setFileChange(false); //resets fileChange
+                    setCurrentFilePath(file);
+                    setPathSet(true);
                     setRecentSave(file); // adds document to recentSaves
                 } catch (Exception ex) {
-                    TilesJavaFX.errorPopup("Error while saving. Error: " + ex.getMessage());
+                    saveScene.errorPopup("Error while saving. Error: " + ex.getMessage());
                 }
             }
         }
     }
 
     //saves a document that has previously been saved
-    public static void saveCurrent() {
-        if (TilesScene.getPathSet()) { //if file has been previously saved
+    public void saveCurrent() {
+        if (getPathSet()) { //if file has been previously saved
             try {
-                PrintWriter output = new PrintWriter(TilesScene.getCurrentFilePath()); //sets name and location of file
-                String[] outputText = TilesScene.getInputText(); //gets lines of text to save
+                PrintWriter output = new PrintWriter(getCurrentFilePath()); //sets name and location of file
+                String[] outputText = saveScene.getInputText(); //gets lines of text to save
                 for (int i = 0; i < outputText.length; i++) {
                     output.println(outputText[i].toString()); //saves lines of text
                 }
                 output.close();
-                TilesScene.setFileChange(false); //resets fileChange
-                setRecentSave(TilesScene.getCurrentFilePath()); // adds document to recentSaves
+                setFileChange(false); //resets fileChange
+                setRecentSave(getCurrentFilePath()); // adds document to recentSaves
             } catch (Exception ex) {
-                TilesJavaFX.errorPopup("Error while saving. Error: " + ex);
+                saveScene.errorPopup("Error while saving. Error: " + ex);
             }
         } else {
             saveAndExport("MD");
@@ -165,7 +173,7 @@ public class Save implements Serializable{
     }
 
     //opens file menu to select a file to open in application
-    public static List<String> openFileChooserOpen() {
+    public List<String> openFileChooserOpen() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open");
 
@@ -182,7 +190,7 @@ public class Save implements Serializable{
     }
 
     // reads txt / md file and returns lines of text
-    public static List<String> fileReader(File inputFile) {
+    public List<String> fileReader(File inputFile) {
         List<String> lines = new ArrayList<String>(); //list of lines in file to open
         //opens selected file
         if (inputFile != null) {
@@ -192,12 +200,12 @@ public class Save implements Serializable{
                 while ( in.hasNextLine() ) {
                     lines.add(in.nextLine().toString());
                 }
-                TilesScene.setFileChange(false); //resets fileChange
-                TilesScene.setCurrentFilePath(inputFile);
-                TilesScene.setPathSet(true);
+                setFileChange(false); //resets fileChange
+                setCurrentFilePath(inputFile);
+                setPathSet(true);
                 setRecentSave(inputFile); // adds document to recentSaves
             } catch (Exception error) {
-                TilesJavaFX.errorPopup("Error while opening file. Error: " + error);
+                saveScene.errorPopup("Error while opening file. Error: " + error);
                 if (recentSaves.contains(inputFile.toString())) { //removed file from recent saves (file no longer exists)
                     recentSaves.remove(inputFile.toString());
                 }
@@ -207,23 +215,23 @@ public class Save implements Serializable{
     }
 
     // returns list recentSaves (list limited to 10 enteries)
-    public static List<String> getRecentSaves() {
+    public List<String> getRecentSaves() {
         return recentSaves;
     }
 
     // returns the file path as a string of a document in recentSaves
-    public static String getRecentSave(int index) {
+    public String getRecentSave(int index) {
         return recentSaves.get(index);
     }
 
     // opens a recent save
-    public static List<String> openRecentSave(String filePath) {
+    public List<String> openRecentSave(String filePath) {
         File file = new File(filePath);
         return fileReader(file);
     }
 
     // sets a new item to recentSaves
-    public static void setRecentSave(File save) {
+    public void setRecentSave(File save) {
         // if save already in list remove old entery and add it into the first slot
         if (recentSaves.contains(save.toString())) {
             recentSaves.remove(save.toString());
@@ -241,13 +249,13 @@ public class Save implements Serializable{
             out.close();
         }
         catch (Exception e) {
-            TilesJavaFX.errorPopup("Error updating recent document:" + e);
+            saveScene.errorPopup("Error updating recent document:" + e);
         }
     }
 
     //set recentSave from file
     @SuppressWarnings ("unchecked")
-    public static void setRecentSaves(String fileName) {
+    public void setRecentSaves(String fileName) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream( fileName ));
             recentSaves = (List<String>)in.readObject();
@@ -257,12 +265,12 @@ public class Save implements Serializable{
             return;
         }
         catch (Exception e) {
-            TilesJavaFX.errorPopup("Error updating recent document:" + e);
+            saveScene.errorPopup("Error updating recent document:" + e);
         }
     }
 
     //displays warning window alerting about unsaved changes
-    public static Boolean changeWarning() {
+    public Boolean changeWarning() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Changes made");
         alert.setHeaderText("Changes have been made since last save");
@@ -277,9 +285,9 @@ public class Save implements Serializable{
     }
 
     //checks for changes to current document
-    public static Boolean changeCheck() {
+    public Boolean changeCheck() {
         Boolean checkOption;
-        if (TilesScene.getfileChange()) { //if file has been previously saved
+        if (getfileChange()) { //if file has been previously saved
             if (changeWarning()) {
                 checkOption = true;
             } else {
@@ -289,5 +297,35 @@ public class Save implements Serializable{
             checkOption = true;
         }
         return checkOption;
+    }
+
+    // returns the current document file path
+    public File getCurrentFilePath() {
+        return currentFilePath;
+    }
+
+    // Sets current document file path
+    public void setCurrentFilePath(File path) {
+        currentFilePath = path;
+    }
+
+    // returns whether the current document file has been change
+    public Boolean getfileChange() {
+        return fileChange;
+    }
+
+    // Sets fileChange variable
+    public void setFileChange(Boolean change) {
+        fileChange = change;
+    }
+
+    // returns whether the current document has a file path
+    public Boolean getPathSet() {
+        return pathSet;
+    }
+
+    // Sets pathSet variable
+    public void setPathSet(Boolean set) {
+        pathSet = set;
     }
 }

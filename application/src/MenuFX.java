@@ -20,32 +20,35 @@ public class MenuFX {
 
     private static final long serialVersionUID = 1L;
 
-    private static MenuBar menuBar;
-    private static MenuItem printItm, newItm, openItm, exitItm,
+    private TilesScene menuScene;
+    private Save save;
+
+    private MenuBar menuBar;
+    private MenuItem printItm, newItm, openItm, exitItm,
         cutItm, copyItm, pasteItm, saveItm, saveAsItm, enterFullScreenItm, pdfExpItm,
         htmlExpItm, viewOneTwo, viewTwoOne, viewOneOne, hidePrevPane, hideEditPane,
         preferencesItm;
-    private static Menu editMenu, fileMenu, viewMenu, helpMenu, exportMenu, openRecentItm;
+    private Menu editMenu, fileMenu, viewMenu, helpMenu, exportMenu, openRecentItm;
 
 
-    public void MenuFX() {
+    public MenuFX(TilesScene currentScene, Save currentSave) {
 
-        //Save options
-        Save save = new Save("recentSave.dat");
+        menuScene = currentScene;
+        save = currentSave;
 
         //adds menu to menu bar on macOS
-        System.setProperty( "apple.laf.useScreenMenuBar", "true" );
-        System.setProperty( "com.apple.mrj.application.apple.menu.about.name", "ImageRotator" );
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "ImageRotator");
 
         //makes object menuBar
         menuBar = new MenuBar();
 
         // elements for menu
-        fileMenu = new Menu( "File" );
-        editMenu = new Menu( "Edit" );
-        viewMenu = new Menu( "View" );
-        helpMenu = new Menu( "Help" );
-        exportMenu = new Menu( "Export" );
+        fileMenu = new Menu("File");
+        editMenu = new Menu("Edit");
+        viewMenu = new Menu("View");
+        helpMenu = new Menu("Help");
+        exportMenu = new Menu("Export");
         openRecentItm = new Menu("Recent documents");
 
         //items for elements
@@ -158,26 +161,26 @@ public class MenuFX {
         //cuts text from mainWindow
         cutItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.MainWinCut();
+                menuScene.MainWinCut();
             }
         });
         //copys text from mainWindow
         copyItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.MainWinCopy();
+                menuScene.MainWinCopy();
             }
         });
         //pastes text to mainWindow
         pasteItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.MainWinPaste();
+                menuScene.MainWinPaste();
             }
         });
         //clears application input area and displays save warning if unsaved changes are present
         newItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 if (save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
-                    TilesScene.clearInputArea();
+                    menuScene.clearInputArea();
                 }
             }
         });
@@ -188,7 +191,7 @@ public class MenuFX {
                 if (save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
                     fileLines = save.openFileChooserOpen();
                     if (fileLines.isEmpty() == false) {
-                        TilesScene.setInputArea(fileLines);
+                        menuScene.setInputArea(fileLines);
                     }
                 }
             }
@@ -216,8 +219,12 @@ public class MenuFX {
         //toggles application between fullscreen and windowed mode
         enterFullScreenItm.setOnAction( new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                Window theStage = TilesScene.getScene().getWindow();
-                TilesJavaFX.toggleMaximize((Stage)theStage);
+                Stage thisStage = ((Stage)menuScene.getScene().getWindow());
+                if (thisStage.isMaximized()) {
+                    thisStage.setMaximized(false);
+                } else {
+                    thisStage.setMaximized(true);
+                }
             }
         });
         //exports current open item as PDF
@@ -234,43 +241,43 @@ public class MenuFX {
             }
         });
         //sets SplitPaneRatio to 1 to 2
-        viewOneTwo.setOnAction( new EventHandler<ActionEvent>() {
+        viewOneTwo.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.setSplitPaneDevider( 1.0/3.0 );
+                menuScene.setSplitPaneDevider(1.0/3.0);
             }
         });
         //sets SplitPaneRatio to 2 to 1
-        viewTwoOne.setOnAction( new EventHandler<ActionEvent>() {
+        viewTwoOne.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.setSplitPaneDevider( 1.0/3.0 * 2 );
+                menuScene.setSplitPaneDevider(1.0/3.0 * 2);
             }
         });
         //sets SplitPaneRatio to 1 to 1
-        viewOneOne.setOnAction( new EventHandler<ActionEvent>() {
+        viewOneOne.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.setSplitPaneDevider( 0.5 );
+                menuScene.setSplitPaneDevider(0.5);
             }
         });
         //sets SplitPaneRatio to 1 to 0
-        hidePrevPane.setOnAction( new EventHandler<ActionEvent>() {
+        hidePrevPane.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.setSplitPaneDevider( 1 );
+                menuScene.setSplitPaneDevider(1);
             }
         });
         //sets SplitPaneRatio to 0 to 1
-        hideEditPane.setOnAction( new EventHandler<ActionEvent>() {
+        hideEditPane.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesScene.setSplitPaneDevider( 0 );
+                menuScene.setSplitPaneDevider(0);
             }
         });
-        printItm.setOnAction( new EventHandler<ActionEvent>() {
+        printItm.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println( "printItm" );
+                System.out.println("printItm");
             }
         });
-        preferencesItm.setOnAction( new EventHandler<ActionEvent>() {
+        preferencesItm.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                TilesJavaFX.openPreferiences();
+                menuScene.openPreferiences();
             }
         });
         // refreshes openRecentItm menu on click
@@ -292,11 +299,11 @@ public class MenuFX {
     }
 
     // refreshes menu items in openRecentItm
-    public static void setOpenRecentItm() {
+    public void setOpenRecentItm() {
         openRecentItm.getItems().clear(); // clear menu items from openRecentItm (removes duplicates)
         //makes a menu item for every entery in recentSaves
-        for (int i = 0; i < Save.getRecentSaves().size(); i++) {
-            String menuItmPath = Save.getRecentSave(i);
+        for (int i = 0; i < save.getRecentSaves().size(); i++) {
+            String menuItmPath = save.getRecentSave(i);
             String menuItmText = menuItmPath;
             MenuItem newDoc = new MenuItem();
             if (menuItmPath.length() <= 35) {
@@ -310,10 +317,10 @@ public class MenuFX {
             newDoc.setOnAction( new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
                     List<String> fileLines;
-                    if (Save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
-                        fileLines = Save.openRecentSave(menuItmPath);
+                    if (save.changeCheck()) { //if no changes were made to current file or user wants to continue without saving
+                        fileLines = save.openRecentSave(menuItmPath);
                         if (fileLines.isEmpty() == false) {
-                            TilesScene.setInputArea(fileLines);
+                            menuScene.setInputArea(fileLines);
                         }
                     }
                 }
