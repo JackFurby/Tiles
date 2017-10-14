@@ -9,16 +9,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
-import java.nio.file.spi.FileTypeDetector;
-import java.nio.file.Files;
-import java.util.Arrays;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.FileInputStream;
-import java.io.Serializable;
-
-import javafx.scene.Scene;
-import javafx.stage.Window;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

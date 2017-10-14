@@ -8,11 +8,8 @@ import javafx.scene.input.KeyCombination;
 import javafx.event.EventHandler;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import java.io.PrintWriter;
-import java.io.File;
 import java.util.List;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

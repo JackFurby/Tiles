@@ -1,12 +1,10 @@
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.SplitPane;
